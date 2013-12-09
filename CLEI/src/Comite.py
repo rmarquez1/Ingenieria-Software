@@ -42,3 +42,12 @@ class Comite():
     def setEsPresidente(self, esPresidente):
         self.esPresidente = esPresidente
 
+class Test():
+
+    # Constructor del comite
+    def __init__(self, correo= None, nombre=None, apellido=None):
+        self.correo = correo
+        self.nombre = nombre
+        self.apellido = apellido
+        self.esPresidente = False
+    

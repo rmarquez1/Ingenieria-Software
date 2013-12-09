@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 class Autor():
 
-    def __init__(self, nombre, apellido, pais)
+    def __init__(self, nombre, apellido, pais):
         self.nombre = nombre
         self.apellido = apellido
         self.pais = pais

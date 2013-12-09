@@ -51,5 +51,9 @@ class Test():
         self.t1 = apellido
         self.t1 = False
 
-
-        
+class Test2():
+    def __init__(self, asd="die", dfs="truy", asd=4):
+        self.t1 = asd
+        self.t2 = dfs
+        self.t3 = asd
+        self.t4 = False

@@ -256,6 +256,7 @@ def Clei():
             print '4. Asignar puntuacion y arbitro a un articulo\n'
             print '5. Generar lista de articulos aceptables\n'
             print '6. Generar lista de articulos aceptados y empatados\n'
+            print '7. Inscribir un nuevo participante\n'
             print '0. SALIR'
             
             try:
@@ -456,8 +457,29 @@ y miembros de comite de programa'''
                                 
                         except ValueError:
                             print 'Opcion invalida'
-                        
+                #########################################################
+                #
+                #
+                #Codigo a implementar para el 
+                #sistema de inscripcion de usuarios
+                #
+                #
+                #########################################################
+                elif opcion == 7:
                     
+                    
+                    while True:
+                        try:
+                            
+                            break
+                        except ValueError:
+                            print 'Opcion invalida'    
+                        
+                ####################################################
+                #
+                #
+                ####################################################
+    
             except ValueError:
                 print 'Opcion invalida'
     except ValueError:

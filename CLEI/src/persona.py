@@ -1,11 +1,14 @@
-#Clase Persona
+#----------------------------------------------------------------------#
+#Clase Persona                                                         #  
+#----------------------------------------------------------------------#
+
 class Persona:
-   def __init__(self,nombre,apellido,inst_afil,correo,pais):
+   def __init__(self,nombre,apellido,inst_afil,correo):
       self.__nombre    = nombre
       self.__apellido  = apellido
       self.__inst_afil = inst_afil
       self.__correo    = correo
-      self.__pais      = pais
+      #self.__pais      = pais  #no 
 
    def getNombre(self):
       return self.__nombre
@@ -13,25 +16,31 @@ class Persona:
       return self.__apellido
    def getInst_afil(self):
       return self.__inst_afil
-   def setInst_afil(self,ints):
-       self.__inst_afil(inst)
-   def setCorreo(self,correo):
-       self.__correo   = correo
-   def setPais(self,pais):
-       self.__pais = pais
+   #def setInst_afil(self,ints):
+   #    self.__inst_afil(inst)
+   def getCorreo(self):
+      return self.__correo
+   #def setCorreo(self,correo):
+   #    self.__correo   = correo
+   #def setPais(self,pais):
+   #    self.__pais = pais
    def nombreCompleto(self):
        return str(self.__nombre)+' '+str(self.__apellido)
-   def ImprimirDatosPersona(self):
-       print '\tNombre: '+self.__nombre
-       print '\tApellido: '+self.__apellido
-       print '\tInstitucion de afiliacion: ' + self.__inst_afil
-       print '\tCorreo Electronico: ' + self.__correo
-       print '\tPais: '+self.__pais
+   #def ImprimirDatosPersona(self):
+   #    print '\tNombre: '+self.__nombre
+   #    print '\tApellido: '+self.__apellido
+   #    print '\tInstitucion de afiliacion: ' + self.__inst_afil
+   #    print '\tCorreo Electronico: ' + self.__correo
+   #    print '\tPais: '+self.__pais
 
-#Clase Comite de Programa
+
+#----------------------------------------------------------------------#
+#Clase Comite de Programa                                              #  
+#----------------------------------------------------------------------#
+
 class Comite(Persona):
-   def __init__(self,nombre, apellido, inst_afil, correo, pais):
-       Persona.__init__(self,nombre, apellido, inst_afil, correo, pais)
+   def __init__(self,nombre, apellido, inst_afil,correo):
+       Persona.__init__(self,nombre, apellido, inst_afil,correo)
        self.__topicos = self.asigTopicos()
 
    def asigTopicos(self):
@@ -39,14 +48,17 @@ class Comite(Persona):
        while True:
          top = raw_input('Indique el topico que domina: ')
          self.__topicos.append(top)
+         top = None
          top = raw_input('Domina algun otro topico? s/n ')
          if top == 'n':
             break
+         top = None
 
 #Clase Autor
 class Autor(Persona):
    def  __init__(self,nombre, apellido, inst_afil, correo, pais):
-      Persona.__init__(self,nombre, apellido, inst_afil, correo, pais)
+      Persona.__init__(self,nombre, apellido, inst_afil, correo)
+      self.__pais =  pais
 
 #funcion para crear el comite
 def CrearComite():

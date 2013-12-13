@@ -226,7 +226,7 @@ class CLEITester(unittest.TestCase):
         espacioRestante = clei2.crearAceptadosYEmpatados(8, 3, articulos2)
 
 
-def Clei():
+def main():
     print '\n ----------- BIENVENIDO AL SISTEMA CLEI ----------\n\n'
     print '                       MENU\n'
     
@@ -244,8 +244,6 @@ def Clei():
             print '2. Crear un miembro de comite de programa\n'
             print '3. Asignar presidente del comite de programa\n'
             print '4. Asignar puntuacion y arbitro a un articulo\n'
-            print '5. Generar lista de articulos aceptables\n'
-            print '6. Generar lista de articulos aceptados y empatados\n'
             print '0. SALIR'
             
             try:
@@ -328,7 +326,7 @@ def Clei():
                                 apellido = raw_input('Apellido: ')
                                 inst_afil = raw_input('Institucion Principal: ')
                                 comite = Comite(nombre, apellido, inst_afil,correo)
-                                miembrosCP[comite.get_correo()] = comite.get_nombre(), comite.get_apellido(),  comite.get_es_presidente() 
+                                miembrosCP[comite.get_correo()] = comite.get_nombre(), comite.get_apellido(),comite.get_inst_afil(), comite.get_es_presidente() 
                                 
                         elif res == 'n' or res == 'N':
                             break
@@ -336,30 +334,35 @@ def Clei():
                             print 'Indique s/n'
 
                 elif opcion == 3:
-                    while True:
-                        presidente = raw_input('Indique el presidente del comite de programa: ')
-                        if miembrosCP.has_key(presidente):
-                            listaMiembros = miembrosCP.items()
-                            tamListaMiembros = len(listaMiembros)
-                            # indica si se consigue algun presidente
-                            temp = 0
-                            
-                            # Verificamos que no existe algun miembro ya presidente
-                            for i in range(tamListaMiembros): 
-                                if listaMiembros[i][1][2] == True:
-                                    temp = 1
+                    if len(miembrosCP) != 0:
+                        while True:
+                            presidente = raw_input('Indique el presidente del comite de programa: ')
+                            if miembrosCP.has_key(presidente):
+                                # Verificamos que no haya otro presidente
+                                lista_correos = miembrosCP.keys()
+                                
+                                # Variable que indica si se consigue algun presidente
+                                temp = 0
+                                for i in range(len(lista_correos)):
+                                    # Caso en el que se consigue un presidente
+                                    if miembrosCP[lista_correos[i]][3] == True:
+                                        temp = 1
+                                        break
+                                        
+                                # Caso en que no se consigue alguien como presidente     
+                                if temp != 1:
+                                    comite.set_es_presidente(True)
+                                    miembrosCP[presidente] = comite.get_nombre(), comite.get_apellido(), comite.get_inst_afil(), comite.get_es_presidente()
+                                    print miembrosCP
+                                    print 'FIN'
                                     break
-                            
-                            # Caso en que no se consigue alguien como presidente     
-                            if temp != 1:
-                                comite.set_es_presidente(True)
-                                miembrosCP[presidente] = comite.get_nombre(), comite.get_apellido(), comite.get_inst_afil(), comite.get_es_presidente()
-                                print miembrosCP
-                                print 'FIN'
+                                else:
+                                    print 'Ya existe un presidente en el comite de programa'
                                 break
-                            break
-                        else:
-                            print 'Miembro inexistente. Intente de nuevo'
+                            else:
+                                print 'Miembro inexistente. Intente de nuevo'
+                    else:
+                        print 'No existe miembros en el comite de programa. Debe crearlos'                      
 
                 elif opcion == 4:
                     while True:
@@ -386,7 +389,7 @@ def Clei():
                                     # Creamos una lista cuyos elementos son tuplas correspondientes a
                                     # (arbitro, puntuacion)
                                     lista = articulo.listaArbitroPuntuacion(listaArticulos, cont)
-                                    
+
                                     # Agregamos al diccionario de evaluaciones
                                     evaluaciones[idArticulo] = lista, listaArticulos[cont].calcularPromedio()
                                     # RECORDAR VER SI UN ARBITRO EVALUA DOS VECES EL MISMO ARTICULO
@@ -394,6 +397,14 @@ def Clei():
                                     print '\nNo existe articulo con ese id\n'    
 
                             elif res == 'n' or res == 'N':
+                                if len(evaluaciones) != 0:
+                                    listaEvaluaciones = evaluaciones.items()
+                                    print 'lista evaluaciones: ', listaEvaluaciones
+                                    # Ordenamos por promedio
+                                    listaEvaluaciones.sort(key=lambda x: x[1][1])
+                                    #Invertimos la lista
+                                    listaEvaluaciones.reverse()
+                                    clei.crearAceptables(listaEvaluaciones)
                                 break
                             else:
                                 print 'Indique s/n'
@@ -403,59 +414,103 @@ def Clei():
                             print '''No hay informacion suficiente para realizar esta operacion. Verifique que haya creado articulos
 y miembros de comite de programa'''      
                             break
-
-                elif opcion == 5:
-                    try:
-
-                        listaEvaluaciones = evaluaciones.items()
-                        # Ordenamos por promedio
-                        listaEvaluaciones.sort(key=lambda x: x[1][1])
-                        #Invertimos la lista
-                        listaEvaluaciones.reverse()
-                        # Creamos la lista de los aceptables
-                        clei.crearAceptables(listaEvaluaciones)
-                        print 'ACEPTABLES: ', clei.getAceptables()
-                    
-                    except ValueError:
-                        'Numero invalido'
-
-                elif opcion == 6:
-                
-                    tamAceptables = len(clei.getAceptables())
-                    print 'tam aceptables: ', tamAceptables
-                    limite = clei.crearAceptadosYEmpatados(tamAceptables, num, articulos)
-
-                    print '\n Indique 1 para ver la lista de empatados\n'
-                    print ' Indique 2 para ver la lista de aceptados\n'
-                    print ' Indique 0 para salir\n' 
-                    
-                    while True:
-                        try:
-                            res = int(raw_input(' Indique su opcion: '))
-                        
-                            if res == 1:
-                                print 'EMPATADOS: \n'
-                                print clei.getEmpatados()
-                                
-                            elif res == 2:
-                                print 'ACEPTADOS: \n'
-                                print clei.getAceptados()
-                                print 'Espacios restantes = ', limite
-                                
-                            elif res == 0:
-                                break
-                                
-                        except ValueError:
-                            print 'Opcion invalida'
-                        
                     
             except ValueError:
                 print 'Opcion invalida'
     except ValueError:
         print 'Opcion invalida'   
 
-def main():
-    Clei()
+    print '-----  PROCESO DE SELECCION DE ARTICULOS -----'
+    print '1. Desempate por presidente de comite\n'
+    print '0. SALIR'
+    try:
+        opcion = int(raw_input('Indique el tipo de seleccion de articulos que desea utilizar: '))
+        while True: 
+            if opcion == 0:
+                break
+            
+            elif opcion == 1:
+                correo_presi = raw_input('Indique su correo como presidente: ')
+                # si el correo pertenece al correo de los miembros registrados
+
+                if miembrosCP.has_key(correo_presi):
+                    # En la posicion 3 del valor del diccionario miembrosCP
+                    # esta el valor del booleano que indica si es presidente o no
+                    if miembrosCP[correo_presi][3] == True:
+                        print 'Bienvenido presidente del comite de programa.\n'
+                        print 'Elija entre las siguientes opciones:\n'
+                        
+                        while True:
+                            print ' 1. Ver lista de articulos aceptables.\n'
+                            print ' 2. Generar articulos a ser aceptados en la conferencia.\n'
+                            print ' 0. SALIR'
+
+                            try:
+                                res = int(raw_input('   Indique el tipo de operacion: '))
+                                if res == 0:
+                                    print 'Finalizo la seleccion de articulos'
+                                    break
+
+                                elif res == 1:
+                                    print 'ACEPTABLES: ', clei.getAceptables()
+
+                                elif res == 2:
+                                    tamAceptables = len(clei.getAceptables())
+                                    print 'tam aceptables: ', tamAceptables
+                                    limite = clei.crearAceptadosYEmpatados(tamAceptables, num, articulos)
+
+                                    # Caso en que quedan articulos en la lista de empatados.
+                                    if len(clei.getEmpatados()) != 0:
+                                        # Caso en que queda espacio en la lista de aceptados
+                                        if limite != 0:
+                                            print 'A continuacion se le presentan la lista de los articulos pertenecientes a la lista de empatados: \n'
+                                            print clei.getEmpatados()
+                                            print '\nA continuacion se le presentan la lista de los articulos que ya pertenecen a la lista de aceptados: \n'
+                                            print clei.getAceptados()
+                                            print '\nEspacio restante en la lista de empatados: ', limite
+                                            print '\nEscoja de entre los empatados aquellos que pasaran a los aceptados:\n'
+                                            
+                                            # Mientras haya espacio en la lista de aceptados
+                                            while limite>0:
+                                                try:
+                                                    id = int(raw_input(' Indique id del articulo a seleccionar: '))
+                                                    # Si el id pertenece a la lista de empatados
+                                                    if id in clei.getEmpatados():
+                                                        clei.setAceptados(id)
+                                                        limite -= 1
+                                                    else:
+                                                        print 'Este id no esta en la lista de empatados'
+                                                    
+                                                except ValueError:
+                                                    print 'Valor de id invalido'
+                                                    
+                                            # Se imprime la nueva lista de aceptados
+                                            print 'La lista de articulos aceptados es: ', clei.getAceptados()
+                                            break
+                                        else:
+                                            print 'La lista de articulos aceptados ya esta llena.\n'
+                                            break
+                                            
+                                    # Si no hay articulos en la lista de empatados no se realiza
+                                    # escogencia
+                                    else:
+                                        print 'No existen articulos en la lista de empatados.\n'
+                                        break
+
+                            # End try res
+                            except ValueError:
+                                print 'Opcion invalida'
+                    else:
+                        print 'Lo sentimos, ud no esta autorizado para esta operacion...'
+                    break
+                else:
+                    print 'Lo sentimos, este correo no pertenece a los miembros del comite. Intente de nuevo'
+
+
+
+    # Except del try opcion
+    except ValueError:
+        print 'Opcion invalida'
                  
 if __name__ == '__main__':
     main()

@@ -41,7 +41,7 @@ class Comite(Persona):
 
     # Retorna True si el miembro es presidente del comite, False en caso contrario        
     def get_es_presidente(self):
-        return self.esPresidente
+        return self.es_presidente
        
     # Asigna True si el miembro es presidente
     def set_es_presidente(self, es_presidente):

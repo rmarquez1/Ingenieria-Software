@@ -121,4 +121,45 @@ class CLEI():
         # Retorna el numero de espacios restantes en la lista de aceptados       
         return numArticulos     
 
-    
+        def seleccion_desempate(self, num, articulos):
+            tamAceptables = len(self.getAceptables())
+            print 'tam aceptables: ', tamAceptables
+            limite = self.crearAceptadosYEmpatados(tamAceptables, num, articulos)
+
+            # Caso en que quedan articulos en la lista de empatados.
+            if len(self.getEmpatados()) != 0:
+                # Caso en que queda espacio en la lista de aceptados
+                if limite != 0:
+                    print 'A continuacion se le presentan la lista de los articulos pertenecientes a la lista de empatados: \n'
+                    print self.getEmpatados()
+                    print '\nA continuacion se le presentan la lista de los articulos que ya pertenecen a la lista de aceptados: \n'
+                    print self.getAceptados()
+                    print '\nEspacio restante en la lista de empatados: ', limite
+                    print '\nEscoja de entre los empatados aquellos que pasaran a los aceptados:\n'
+
+                    # Mientras haya espacio en la lista de aceptados
+                    while limite>0:
+                        try:
+                            id = int(raw_input(' Indique id del articulo a seleccionar: '))
+                            # Si el id pertenece a la lista de empatados
+                            if id in self.getEmpatados():
+                                self.setAceptados(id)
+                                limite -= 1
+                            else:
+                                print 'Este id no esta en la lista de empatados'
+
+                        except ValueError:
+                            print 'Valor de id invalido'
+
+                else:
+                    print 'La lista de articulos aceptados ya esta llena.\n'
+                    break
+
+            # Si no hay articulos en la lista de empatados no se realiza
+            # escogencia
+            else:
+                print 'No existen articulos en la lista de empatados.\n'
+                break
+                
+            return self.getAceptados()
+            

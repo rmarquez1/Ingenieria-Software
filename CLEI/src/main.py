@@ -1,6 +1,7 @@
 from Articulo import *
 from Persona import *
 from CLEI import *
+from Inscripcion import *
 import sys
 import unittest
 
@@ -235,6 +236,7 @@ def main():
     miembrosCP = {}
     evaluaciones = {}
     clei = CLEI()
+    inscritos = {}
     
     try:
         num = int(raw_input('Indique el numero de articulos que se presentaran en el congreso: '))
@@ -244,6 +246,8 @@ def main():
             print '2. Crear un miembro de comite de programa\n'
             print '3. Asignar presidente del comite de programa\n'
             print '4. Asignar puntuacion y arbitro a un articulo\n'
+            print '7. Inscribir un nuevo participante\n'
+            print '8. Listar participantes\n'
             print '0. SALIR'
             
             try:
@@ -413,12 +417,65 @@ def main():
                         else:
                             print '''No hay informacion suficiente para realizar esta operacion. Verifique que haya creado articulos
 y miembros de comite de programa'''      
-                            break
+
+                #########################################################
+                #
+                #
+                #Codigo a implementar para el 
+                #sistema de inscripcion de usuarios
+                #
+                #
+                #########################################################
+                elif opcion == 7:
                     
+                    while True:
+                        try:
+                            res = raw_input('\nDesea agregar un nuevo miembro? (s/n): ')
+                            if res == 's' or res == 'S':
+                                
+                                nombre = pedir('Nombre')
+                                apellido = pedir('Apellido')
+                                institucion = pedir_institucion()
+                                while True:
+                                    correo = pedir_correo()
+                                    if correo in inscritos:
+                                        res = raw_input('Este correo ya esta siendo utilizado, desea introducir otro correo? (s/n): ')
+                                        if res == 'n' or res == 'N':
+                                            break
+                                        elif res != 's' or res != 'S':
+                                            print 'respuesta invalida'
+                                    else:
+                #Actualmente agrega la persona a la lista
+                #Eventualmente debe agregar, de alguna forma, el paquete al que esta asociado
+                #y quizas si es autor o no (por discutir)
+                                        inscritos[correo] = Persona(nombre, apellido, institucion, correo)
+                                        break
+                                
+                            elif res == 'n' or res == 'N':
+                                break
+                            
+                            else:
+                                print 'Respuesta invalida\n'
+                        except ValueError:
+                            print 'Opcion invalida\n'    
+                 
+                elif opcion == 8:
+                
+                    for  x in sorted(inscritos):
+                        print '\n nombre     : ' + inscritos[x].nombre_completo()
+                        print '   institucion: ' + inscritos[x].get_inst_afil()
+                        print '   correo     : ' + inscritos[x].get_correo() + '\n'
+      
+                        
+                ####################################################
+                #
+                #
+                ####################################################
+    
             except ValueError:
-                print 'Opcion invalida'
+                print 'Opcion invalida\n'
     except ValueError:
-        print 'Opcion invalida'   
+        print 'Opcion invalida\n'   
 
     print '-----  PROCESO DE SELECCION DE ARTICULOS -----'
     print '1. Desempate por presidente de comite\n'

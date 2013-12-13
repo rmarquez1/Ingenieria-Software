@@ -502,7 +502,7 @@ y miembros de comite de programa'''
                                 print 'Opcion invalida'
                     else:
                         print 'Lo sentimos, ud no esta autorizado para esta operacion...'
-                    break
+                    
                 else:
                     print 'Lo sentimos, este correo no pertenece a los miembros del comite. Intente de nuevo'
 

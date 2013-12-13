@@ -1,5 +1,5 @@
 from Articulo import *
-from Comite import *
+from Persona import *
 from CLEI import *
 import sys
 import unittest
@@ -19,25 +19,15 @@ class ComiteTester(unittest.TestCase):
         
     # Prueba de asignar un presidente
     def testPresidente(self):
-        comite = Comite('correo@ezequiel','Ezequiel', 'Gimenez')
-        assert comite.getEsPresidente() == False, 'Fallo asignacion de presidente'
-        comite.setEsPresidente(True)
-        assert comite.getEsPresidente() == True, 'Fallo asignacion de presidente'
+        comite = Comite('Ezequiel', 'Gimenez','USB', 'correo@ezequiel',)
+        assert comite.get_es_presidente() == False, 'Fallo asignacion de presidente'
+        comite.set_es_presidente(True)
+        assert comite.get_es_presidente() == True, 'Fallo asignacion de presidente'
         
-        comite1 = Comite('correo@ramon', 'Ramon', 'Marquez')
-        assert comite1.getEsPresidente() == False, 'Fallo asignacion de presidente'
-        comite1.setEsPresidente(True)
+        comite1 = Comite('Ramon', 'Marquez','UCV','correo@ramon')
+        assert comite1.get_es_presidente() == False, 'Fallo asignacion de presidente'
+        comite1.set_es_presidente(True)
         assert comite1.getEsPresidente() == True, 'Fallo asignacion de presidente'
-        
-        comite2 = Comite('correo@samantha', 'Samantha', 'Campisi')
-        assert comite2.getEsPresidente() == False, 'Fallo asignacion de presidente'
-        comite2.setEsPresidente(True)
-        assert comite2.getEsPresidente() == True, 'Fallo asignacion de presidente'
-
-        comite3 = Comite('correo@carlos', 'Carlos', 'Cruz')
-        assert comite3.getEsPresidente() == False, 'Fallo asignacion de presidente'
-        comite3.setEsPresidente(True)
-        assert comite3.getEsPresidente() == True, 'Fallo asignacion de presidente'
 
 # ------------------------------------------------------------------------------
 # Prueba de la clase Articulo
@@ -116,16 +106,16 @@ class CLEITester(unittest.TestCase):
         evaluaciones = {}
         listaArticulos = []
         articulo = Articulo(1,'Software', 'Resumen','Texto')
-        comite = Comite('correo','Franyelin', 'Colina')
-        comite1 = Comite('correo1', 'Ramon', 'Marquez')
+        comite = Comite('Franyelin', 'Colina','ucv','correo')
+        comite1 = Comite('Ramon', 'Marquez','USB','correo1')
         articulos[articulo.getIdArticulo()] = articulo
 
         listaArticulos.append(articulo)
         
         clei = CLEI()
         
-        cont = articulo.asignarArbitroPuntuacion(1, articulos, comite.getCorreo(), listaArticulos)
-        cont = articulo.asignarArbitroPuntuacion(1, articulos, comite1.getCorreo(), listaArticulos)
+        cont = articulo.asignarArbitroPuntuacion(1, articulos, comite.get_correo(), listaArticulos)
+        cont = articulo.asignarArbitroPuntuacion(1, articulos, comite1.get_correo(), listaArticulos)
         lista = articulo.listaArbitroPuntuacion(listaArticulos, cont)
         evaluaciones[1] = lista, listaArticulos[cont].calcularPromedio()
         listaEvaluaciones = evaluaciones.items()
@@ -337,8 +327,9 @@ def Clei():
                             else:
                                 nombre = raw_input('Nombre: ')
                                 apellido = raw_input('Apellido: ')
-                                comite = Comite(correo, nombre, apellido)
-                                miembrosCP[comite.getCorreo()] = comite.getNombre(), comite.getApellido(), comite.getEsPresidente() 
+                                inst_afil = raw_input('Institucion Principal: ')
+                                comite = Comite(nombre, apellido, inst_afil,correo)
+                                miembrosCP[comite.get_correo()] = comite.get_nombre(), comite.get_apellido(),  comite.get_es_presidente() 
                                 
                         elif res == 'n' or res == 'N':
                             break
@@ -362,8 +353,8 @@ def Clei():
                             
                             # Caso en que no se consigue alguien como presidente     
                             if temp != 1:
-                                comite.setEsPresidente(True)
-                                miembrosCP[presidente] = comite.getNombre(), comite.getApellido(), comite.getEsPresidente()
+                                comite.set_es_presidente(True)
+                                miembrosCP[presidente] = comite.get_nombre(), comite.get_apellido(), comite.get_inst_afil(), comite.get_es_presidente()
                                 print miembrosCP
                                 print 'FIN'
                                 break

@@ -1,6 +1,7 @@
 from Articulo import *
 from Persona import *
 from CLEI import *
+from Inscripcion import *
 import sys
 import unittest
 
@@ -235,6 +236,7 @@ def Clei():
     miembrosCP = {}
     evaluaciones = {}
     clei = CLEI()
+    inscritos = {}
     
     try:
         num = int(raw_input('Indique el numero de articulos que se presentaran en el congreso: '))
@@ -247,6 +249,7 @@ def Clei():
             print '5. Generar lista de articulos aceptables\n'
             print '6. Generar lista de articulos aceptados y empatados\n'
             print '7. Inscribir un nuevo participante\n'
+            print '8. Listar participantes\n'
             print '0. SALIR'
             
             try:
@@ -458,13 +461,40 @@ y miembros de comite de programa'''
                 #########################################################
                 elif opcion == 7:
                     
-                    
                     while True:
                         try:
+                            res = raw_input('\nDesea agregar un nuevo miembro? (s/n): ')
+                            if res == 's' or res == 'S':
+                                
+                                nombre = pedir('Nombre')
+                                apellido = pedir('Apellido')
+                                institucion = pedir_institucion()
+                                while True:
+                                    correo = pedir_correo()
+                                    if correo in inscritos:
+                                        res = raw_input('Este correo ya esta siendo utilizado, desea introducir otro correo? (s/n): ')
+                                        if res == 'n' or res == 'N':
+                                            break
+                                        elif res != 's' or res != 'S':
+                                            print 'respuesta invalida'
+                                    else:
+                                        inscritos[correo] = Persona(nombre, apellido, institucion, correo)
+                                        break
+                                
+                            elif res == 'n' or res == 'N':
+                                break
                             
-                            break
+                            else:
+                                print 'Respuesta invalida\n'
                         except ValueError:
-                            print 'Opcion invalida'    
+                            print 'Opcion invalida\n'    
+                 
+                elif opcion == 8:
+                
+                    for  x in sorted(inscritos):
+                        print '\n nombre     : ' + inscritos[x].nombre_completo()
+                        print '   institucion: ' + inscritos[x].get_inst_afil()
+                        print '   correo     : ' + inscritos[x].get_correo() + '\n'
                         
                 ####################################################
                 #
@@ -472,9 +502,9 @@ y miembros de comite de programa'''
                 ####################################################
     
             except ValueError:
-                print 'Opcion invalida'
+                print 'Opcion invalida\n'
     except ValueError:
-        print 'Opcion invalida'   
+        print 'Opcion invalida\n'   
 
 def main():
     Clei()

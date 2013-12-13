@@ -478,6 +478,9 @@ y miembros de comite de programa'''
                                         elif res != 's' or res != 'S':
                                             print 'respuesta invalida'
                                     else:
+                #Actualmente agrega la persona a la lista
+                #Eventualmente debe agregar, de alguna forma, el paquete al que esta asociado
+                #y quizas si es autor o no (por discutir)
                                         inscritos[correo] = Persona(nombre, apellido, institucion, correo)
                                         break
                                 

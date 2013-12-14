@@ -46,13 +46,14 @@ class Comite(Persona):
     # Asigna True si el miembro es presidente
     def set_es_presidente(self, es_presidente):
         self.es_presidente = es_presidente
-
+        
 #----------------------------------------------------------------------#
 # Clase Autor
 #----------------------------------------------------------------------#
 class Autor(Persona):
-    def __init__(self,nombre=None,apellido=None,inst_afil=None,correo=None, pais=None):
-        Persona.__init__(self,nombre, apellido, inst_afil, correo)
+    def __init__(self,nombre=None,inst_afil=None, pais=None):
+        self.nombre = nombre
+        self.inst_afil = inst_afil
         self.pais = pais
 
     def get_pais(self):

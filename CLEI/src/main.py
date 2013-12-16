@@ -5,6 +5,27 @@ from Inscripcion import *
 import sys
 import unittest
 
+# Se obtiene un numero y verifica que sea valido
+def get_number(msg):
+  while 1:
+    try:
+      num = int(raw_input("%s: " % msg))
+    except ValueError:
+      sys.stderr.write("El valor no es un numero...\n")
+      continue
+    return num
+
+# Se obtiene un string y verifica que no sea vacio
+def get_string(msg):
+  while 1:
+    str = raw_input("%s: " % msg)
+    str = str.strip()
+    if str == "":
+      sys.stderr.write("Error: string vacio...\n")
+      continue
+    else:
+      return str
+  
 # ------------------------------------------------------------------------------
 # Pruebas de la clase Comite
 # ------------------------------------------------------------------------------
@@ -12,333 +33,564 @@ class ComiteTester(unittest.TestCase):
 
     # Prueba de creacion de un miembro del comite de programa
     def testComite(self):
-        comite = Comite('correo@gmail.com','Ramon', 'Marquez')
-        assert comite.getCorreo() == 'correo@gmail.com', 'Fallo creacion de miembro CP'
-        assert comite.getNombre() == 'Ramon', 'Fallo creacion de miembro CP'
-        assert comite.getApellido() == 'Marquez', 'Fallo creacion de miembro CP'
-        assert comite.getEsPresidente() == False, 'Fallo creacion de miembro CP'
+        comite = Comite('Ramon', 'Marquez', 'usb', 'correo@gmail.com')
+        nombre = comite.get_nombre()
+        apellido = comite.get_apellido()
+        inst_afil = comite.get_inst_afil()
+        correo = comite.get_correo()
+        self.assertEquals('Ramon', nombre)
+        self.assertEquals('Marquez', apellido)
+        self.assertEquals('usb', inst_afil)
+        self.assertEquals('correo@gmail.com', correo)
         
-    # Prueba de asignar un presidente
-    def testPresidente(self):
-        comite = Comite('Ezequiel', 'Gimenez','USB', 'correo@ezequiel',)
-        assert comite.get_es_presidente() == False, 'Fallo asignacion de presidente'
+    # Test de asignacion de presidente al comite
+    def testAsignarPresidente(self):
+        comite = Comite('Ramon', 'Marquez', 'usb', 'correo@gmail.com')
         comite.set_es_presidente(True)
-        assert comite.get_es_presidente() == True, 'Fallo asignacion de presidente'
-        
-        comite1 = Comite('Ramon', 'Marquez','UCV','correo@ramon')
-        assert comite1.get_es_presidente() == False, 'Fallo asignacion de presidente'
-        comite1.set_es_presidente(True)
-        assert comite1.getEsPresidente() == True, 'Fallo asignacion de presidente'
-
-# ------------------------------------------------------------------------------
-# Prueba de la clase Articulo
-# ------------------------------------------------------------------------------
-class ArticuloTester(unittest.TestCase):
-
-    # Test de creacion de un articulo
-    def testArticulo(self):
-        articulo = Articulo(1,'Ingenieria', 'Resumen', 'Texto')
-        assert articulo.get_id_articulo() == 1, 'Fallo creacion de articulo'
-        assert articulo.get_titulo() == 'Ingenieria', 'Fallo creacion de articulo'
-        assert articulo.get_resumen() == 'Resumen', 'Fallo creacion de articulo'
-        assert articulo.get_texto() == 'Texto', 'Fallo creacion de articulo'
-        assert articulo.get_aceptado() == False, 'Fallo creacion de articulo'
-
-    # Testa de asignacion de las palabras claves de los articulos
-    def testPalabrasClaves(self):
-        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
-                            'software')
-        assert articulo.get_p_claves()[0] == 'software' , 'Fallo asignacion de palabras claves'
-        
-        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
-                             'informacion', 'tecnologia')
-        assert articulo1.get_p_claves()[0] == 'informacion' , 'Fallo asignacion de palabras claves'
-        assert articulo1.get_p_claves()[1] == 'tecnologia' , 'Fallo asignacion de palabras claves'
-        
-        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
-                             'Automata', 'Lenguaje', 'Deterministico')
-        assert articulo2.get_p_claves()[0] == 'Automata' , 'Fallo asignacion de palabras claves'
-        assert articulo2.get_p_claves()[1] == 'Lenguaje' , 'Fallo asignacion de palabras claves'
-        assert articulo2.get_p_claves()[2] == 'Deterministico' , 'Fallo asignacion de palabras claves'
-        
-        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
-                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
-        assert articulo3.get_p_claves()[0] == 'Conjuntos','Fallo asignacion de palabras claves'
-        assert articulo3.get_p_claves()[1] == 'Familia', 'Fallo asignacion de palabras claves'
-        assert articulo3.get_p_claves()[2] == 'Interseccion', 'Fallo asignacion de palabras claves'
-        assert articulo3.get_p_claves()[3] == 'Inversa', 'Fallo asignacion de palabras claves'
-        
-        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
-                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
-        assert articulo4.get_p_claves()[0] == 'Clase', 'Fallo asignacion de palabras claves'
-        assert articulo4.get_p_claves()[1] == 'Diseno', 'Fallo asignacion de palabras claves'
-        assert articulo4.get_p_claves()[2] == 'Acoplamiento', 'Fallo asignacion de palabras claves'
-        assert articulo4.get_p_claves()[3] == 'Cohesion', 'Fallo asignacion de palabras claves'
-        assert articulo4.get_p_claves()[4] == 'Pruebas', 'Fallo asignacion de palabras claves'
- 
-    # Test de asignacion arbitro-puntuacion a un articulo        
-    def testAsignarArbitroPuntuacionArticulo(self):
-        articulos = {}
-        listaArticulos = []
-        articulo = Articulo(1,'Software', 'Resumen','Texto')
-        comite = Comite('correo','Franyelin', 'Colina')
-        articulos[articulo.get_id_articulo()] = articulo
-        listaArticulos.append(articulo)
-        cont = articulo.asignar_arbitro_puntuacion(1, articulos, comite.getCorreo(), listaArticulos)
-        lista = articulo.lista_arbitro_puntuacion(listaArticulos, cont)
-        assert lista[0][1] == articulo.get_puntuacion()[0],'Fallo asignacion arbitro puntuacion'
-
-    # Test de calcular el promedio de las evaluaciones de un articulo
-    def testCalculoPromedio(self):
-        articulo = Articulo(1, 'Sistemas', 'Resumen', 'Texto')
-        articulo.set_puntuacion(5)
-        articulo.set_puntuacion(4)
-        articulo.calcular_promedio()
-        assert articulo.calcular_promedio() == 4.5, 'Fallo calculo promedio'  
-
+        res = comite.get_es_presidente()
+        self.assertTrue(res, 'Debe ser presidente este miembro de comite')
 
 # ------------------------------------------------------------------------------
 # Prueba de la clase CLEI
 # ------------------------------------------------------------------------------
 class CLEITester(unittest.TestCase):
-    # Test de insercion de articulos en la lista de aceptables
-    def testAceptables(self):
-        articulos = {}
-        evaluaciones = {}
-        listaArticulos = []
-        articulo = Articulo(1,'Software', 'Resumen','Texto')
-        comite = Comite('Franyelin', 'Colina','ucv','correo')
-        comite1 = Comite('Ramon', 'Marquez','USB','correo1')
-        articulos[articulo.get_id_articulo()] = articulo
-
-        listaArticulos.append(articulo)
+    
+    # Test de asignacion de presidente de comite en la conferencia
+    def testAsignarPresidenteComite(self):
+        clei = CLEI(2)
+        clei.crear_miembros_cp('Ramon', 'Marquez', 'usb', 'correo@gmail.com')
+        clei.crear_miembros_cp('Franyelin', 'Colina', 'ucv', 'correo@hotmail.com')
+        res = clei.asignar_presidente_comite('correo@gmail.com')
+        res1 = clei.asignar_presidente_comite('correo@hotmail.com')
+        self.assertTrue(res, 'El miembro de correo correo@gmail.com tiene que ser presidente')
+        self.assertFalse(res1, 'El miembro correo@hotmail.com no puede ser presidente')
         
-        clei = CLEI()
+    
+    # Test de verificar la existencia de un articulo
+    def testVerificarId(self):
+        clei = CLEI(3)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
         
-        cont = articulo.asignar_arbitro_puntuacion(1, articulos, comite.get_correo(), listaArticulos)
-        cont = articulo.asignar_arbitro_puntuacion(1, articulos, comite1.get_correo(), listaArticulos)
-        lista = articulo.lista_arbitro_puntuacion(listaArticulos, cont)
-        evaluaciones[1] = lista, listaArticulos[cont].calcular_promedio()
-        listaEvaluaciones = evaluaciones.items()
-        # Ordenamos por promedio
-        listaEvaluaciones.sort(key=lambda x: x[1][1])
-        #Invertimos la lista
-        listaEvaluaciones.reverse()
-        clei.crear_aceptables(listaEvaluaciones)
-        assert clei.get_aceptables()[0][0] == 1, 'Fallo creacion de aceptables'
-
-
-    # Test de insercion de articulos en la lista de aceptados y empatados
-    def testAceptadosEmpatados(self):
-        clei = CLEI()
-        articulos = {}
-        articulo1 = Articulo(1)
-        articulo2 = Articulo(2)
-        articulo3 = Articulo(3)
-        articulo4 = Articulo(4)
-        articulo5 = Articulo(5)
-        articulo6 = Articulo(6)
-        articulo7 = Articulo(7)
-        articulo8 = Articulo(8)
-        articulos[1] = articulo1
-        articulos[2] = articulo2
-        articulos[3] = articulo3
-        articulos[4] = articulo4
-        articulos[5] = articulo5
-        articulos[6] = articulo6
-        articulos[7] = articulo7
-        articulos[8] = articulo8
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
         
-        clei.set_aceptables(1,5)
-        clei.set_aceptables(2,5)
-        clei.set_aceptables(3,5)
-        clei.set_aceptables(4,4.75)
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'USA')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        clei.articulos[articulo.get_id_articulo()] = articulo
+        clei.articulos[articulo1.get_id_articulo()] = articulo1
+        res = clei.verificar_id(1)
+        res1 = clei.verificar_id(2)
+        
+        self.assertTrue(res,'Existe articulo 1')
+        self.assertTrue(res1,'Existe articulo 2')
+        
+    # Test que verifica la existencia de un miembro
+    def testVerificarCorreo(self):
+        clei = CLEI(3)
+        comite = Comite('Ramon', 'Marquez', 'usb', 'correo@gmail.com')
+        comite1 = Comite('Franyelin', 'Colina', 'ucv', 'correo@hotmail.com')
+        
+        clei.miembros_cp[comite.get_correo()] = comite
+        clei.miembros_cp[comite1.get_correo()] = comite
+        
+        res = clei.verificar_correo('correo@gmail.com')
+        res1 = clei.verificar_correo('correo@hotmail.com')
+    
+        self.assertTrue(res, 'Debe existir el correo correo@gmail.com')
+        self.assertTrue(res1, 'Debe existir el correo correo@hotmail.com')
+        
+    # Test de listar los paises participantes en la conferencia
+    def testPaisConferencia(self):
+        clei = CLEI(3)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'USA')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+        articulo2.set_autores('Carla', 'UCV', 'Venezuela')
+        articulo2.set_autores('Alejandro', 'UCV', 'Colombia')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Canada')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        clei.articulos[articulo.get_id_articulo()] = articulo
+        clei.articulos[articulo1.get_id_articulo()] = articulo1
+        clei.articulos[articulo2.get_id_articulo()] = articulo2
+        clei.articulos[articulo3.get_id_articulo()] = articulo3
+        clei.articulos[articulo4.get_id_articulo()] = articulo4
+        
+        clei.set_aceptables(1,4.5)
+        clei.set_aceptables(2,4)
+        clei.set_aceptables(3,3)
+        clei.set_aceptables(4,5)
         clei.set_aceptables(5,4.5)
-        clei.set_aceptables(6,4.5)
-        clei.set_aceptables(7,4)
-        clei.set_aceptables(8,4)
+        
+        
+        lista_paises = clei.paises_conferencia()
+        print 'Lista conferencia: ', lista_paises
 
-        espacioRestante = clei.crear_aceptados_empatados(8, 4, articulos)
-        assert clei.get_aceptados()[0] == 1, 'Fallo creacion de aceptados'
-        assert clei.get_aceptados()[1] == 2, 'Fallo creacion de aceptados'
-        assert clei.get_aceptados()[2] == 3, 'Fallo creacion de aceptados'
-        assert clei.get_aceptados()[3] == 4, 'Fallo creacion de aceptados'
-        assert espacioRestante == 0, 'Fallo creacion de aceptados'
-        assert clei.get_empatados()[0] == 5, 'Fallo creacion de empatados'
-        assert clei.get_empatados()[1] == 6, 'Fallo creacion de empatados'        
+    # Test de articulos presentados por un pais y que sean considerados como
+    # aceptables
+    def testArticulosPais(self):
+        clei = CLEI(3)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        clei.articulos[articulo.get_id_articulo()] = articulo
+        clei.articulos[articulo1.get_id_articulo()] = articulo1
+        clei.articulos[articulo2.get_id_articulo()] = articulo2
+        clei.articulos[articulo3.get_id_articulo()] = articulo3
+        clei.articulos[articulo4.get_id_articulo()] = articulo4
+        
+        clei.set_aceptables(1,4.5)
+        clei.set_aceptables(2,4)
+        clei.set_aceptables(3,3)
+        clei.set_aceptables(4,5)
+        
+        lista_por_pais = clei.listar_articulos_por_pais('Venezuela')
+        print 'Lista de articulos de Venezuela: ', lista_por_pais
+             
+
+    # Test de seleccion de articulos por pais
+    def testSeleccionarPorPais(self):
+        clei = CLEI(3)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+        
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
 
         
-        clei1 = CLEI()
-        articulos1 = {}
-        articulo1 = Articulo(1)
-        articulo2 = Articulo(2)
-        articulo3 = Articulo(3)
-        articulo4 = Articulo(4)
-        articulo5 = Articulo(5)
-        articulo6 = Articulo(6)
-        articulo7 = Articulo(7)
-        articulo8 = Articulo(8)
-        articulos1[1] = articulo1
-        articulos1[2] = articulo2
-        articulos1[3] = articulo3
-        articulos1[4] = articulo4
-        articulos1[5] = articulo5
-        articulos1[6] = articulo6
-        articulos1[7] = articulo7
-        articulos1[8] = articulo8
         
-        clei1.set_aceptables(1,5)
-        clei1.set_aceptables(2,5)
-        clei1.set_aceptables(3,4.75)
-        clei1.set_aceptables(4,4.75)
-        clei1.set_aceptables(5,4.5)
-        clei1.set_aceptables(6,4.5)
-        clei1.set_aceptables(7,4)
-        clei1.set_aceptables(8,4)
-        espacioRestante = clei1.crear_aceptados_empatados(8, 3, articulos1)
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
         
+        clei.crear_aceptables()
+        print clei.get_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        lista_paises = clei.seleccionar_por_pais(2)
+        print 'Lista por pais: ', lista_paises
         
-        clei2 = CLEI()
-        articulos2 = {}
-        articulo1 = Articulo(1)
-        articulo2 = Articulo(2)
-        articulo3 = Articulo(3)
-        articulo4 = Articulo(4)
-        articulo5 = Articulo(5)
-        articulo6 = Articulo(6)
-        articulo7 = Articulo(7)
-        articulo8 = Articulo(8)
-        articulos2[1] = articulo1
-        articulos2[2] = articulo2
-        articulos2[3] = articulo3
-        articulos2[4] = articulo4
-        articulos2[5] = articulo5
-        articulos2[6] = articulo6
-        articulos2[7] = articulo7
-        articulos2[8] = articulo8
-        clei2.set_aceptables(1,5)
-        clei2.set_aceptables(2,5)
-        clei2.set_aceptables(3,5)
-        clei2.set_aceptables(4,5)
-        clei2.set_aceptables(5,5)
-        clei2.set_aceptables(6,5)
-        clei2.set_aceptables(7,5)
-        clei2.set_aceptables(8,5)
-        espacioRestante = clei2.crear_aceptados_empatados(8, 3, articulos2)
 
+
+                
+        
 
 def main():
     print '\n ----------- BIENVENIDO AL SISTEMA CLEI ----------\n\n'
     print '                       MENU\n'
     
+    num = get_number('Indique el numero de articulos que se presentaran en el congreso')   
+    # Creamos la conferencia
+    clei = CLEI(num)
 
-    try:
-        num = int(raw_input('Indique el numero de articulos que se presentaran en el congreso: '))
-        
-        # Creamos la conferencia
-        clei = CLEI(num)
-        
-        while True: 
-            print '\n1. Crear un articulo\n'
-            print '2. Crear un miembro de comite de programa\n'
-            print '3. Asignar presidente del comite de programa\n'
-            print '4. Asignar puntuacion y arbitro a un articulo\n'
-            print '5. Inscribir un nuevo participante\n'
-            print '6. Listar participantes\n'
-            print '0. SALIR'
-            
-            try:
-                opcion = int(raw_input(' Indique la operacion que desea realizar: '))
-                if opcion == 0:
+    while True: 
+        print '\n1. Crear un articulo\n'
+        print '2. Crear un miembro de comite de programa\n'
+        print '3. Asignar presidente del comite de programa\n'
+        print '4. Asignar puntuacion y arbitro a un articulo\n'
+        print '5. Inscribir un nuevo participante\n'
+        print '6. Listar participantes\n'
+        print '0. SALIR'
+
+        opcion = get_number(' Indique la operacion que desea realizar')
+        if opcion == 0:
+            break
+
+        elif opcion == 1:
+            while True:
+                res = get_string('Crear articulo (s/n)')
+                if res == 's' or res == 'S':
+                    id_articulo = get_number('ID')
+                    existe_id = clei.verificar_id(id_articulo)
+                    if existe_id == True:
+                        print 'Ya existe articulo con ese id'
+                    else:
+                        titulo = get_string('Titulo')
+                        resumen = get_string('Resumen')
+                        texto = get_string('Texto')
+
+                        while True:
+                            num_p_claves = get_number('Indique cuantas palabras claves desea asignar al articulo')
+                            if num_p_claves < 1 or num_p_claves > 5:
+                                print '\nPuede asignar minimo 1 y maximo 5 palabras claves\n'
+
+                            else:
+                                if num_p_claves == 1:
+                                    p_clave = get_string('Palabra clave')
+                                    articulo = Articulo(id_articulo, titulo, resumen, texto, p_clave)
+
+                                elif num_p_claves == 2:
+                                    p_clave1 = get_string('Palabra clave')
+                                    p_clave2 = get_string('Palabra clave')
+                                    articulo = Articulo(id_articulo, titulo, resumen, texto, p_clave1, p_clave2)
+
+                                elif num_p_claves == 3:
+                                    p_clave1 = get_string('Palabra clave')
+                                    p_clave2 = get_string('Palabra clave')
+                                    p_clave3 = get_string('Palabra clave')
+                                    articulo = Articulo(id_articulo, titulo, resumen, texto, p_clave1, p_clave2, p_clave3)
+
+                                elif num_p_claves == 4:
+                                    p_clave1 = get_string('Palabra clave')
+                                    p_clave2 = get_string('Palabra clave')
+                                    p_clave3 = get_string('Palabra clave')
+                                    p_clave4 = get_string('Palabra clave')
+                                    articulo = Articulo(id_articulo, titulo, resumen, texto, p_clave1, p_clave2, p_clave3, p_clave4)
+
+                                elif num_p_claves == 5:
+                                    p_clave1 = get_string('Palabra clave')
+                                    p_clave2 = get_string('Palabra clave')
+                                    p_clave3 = get_string('Palabra clave')
+                                    p_clave4 = get_string('Palabra clave')
+                                    p_clave5 = get_string('Palabra clave')
+                                    articulo = Articulo(id_articulo, titulo, resumen, texto, p_clave1, p_clave2, p_clave3, p_clave4, p_clave5)
+
+
+                                num_autores = get_number('Indique cantidad de autores')
+                                clei.crear_articulos(id_articulo,articulo)
+                                # Asignamos los autores al articulo
+                                for i in range(num_autores):
+                                    nombre_autor = get_string('Indique el nombre del autor')
+                                    inst_afil = get_string('Indique la institucion principal')
+                                    pais = get_string('Indique el pais proveniente')
+                                    clei.asignar_autores(id_articulo,nombre_autor, inst_afil, pais)
+                                clei.articulos[id_articulo].imprimir_autores()
+                                break
+                elif res == 'n' or res == 'N':
+                    break
+                else:
+                    print '\nIndique s/n\n'
+
+        elif opcion == 2:
+            while True:
+                res = get_string('Crear miembro del CP (s/n)')
+                if res == 's' or res == 'S':
+                    correo = get_string('Correo')
+                    res = clei.verificar_correo(correo)
+                    if res == True:
+                        print 'Ya existe un miembro con ese correo. Intentelo de nuevo'
+                    else:
+                        nombre = get_string('Nombre')
+                        apellido = get_string('Apellido')
+                        inst_afil = get_string('Institucion principal')
+                        clei.crear_miembros_cp(nombre, apellido, inst_afil, correo)
+
+                elif res == 'n' or res == 'N':
+                    break
+                else:
+                    print 'Indique s/n'
+
+        elif opcion == 3:
+            if len(clei.miembros_cp) != 0:
+                while True:
+                    presidente = get_string('Indique el presidente del comite de programa')
+                    res = clei.verificar_correo(presidente)
+                    if res == True:
+                        clei.asignar_presidente_comite(presidente)
+                        break
+                    else:
+                        print 'Miembro inexistente. Intente de nuevo'
+            else:
+                print 'No existe miembros en el comite de programa. Debe crearlos'   
+
+        elif opcion == 4:
+            while True:
+                if len(clei.miembros_cp)>0 and len(clei.articulos)>0:
+                    res = get_string('   Crear arbitros y puntuaciones (s/n)')
+                    if res == 's' or res == 'S':   
+                        id_articulo = get_number('    ID del articulo a evaluar')
+                        existe_id = clei.verificar_id(id_articulo)
+                        if existe_id == True:
+                            while True:
+                                correo = get_string('    Correo del arbitro')
+                                existe_correo = clei.verificar_correo(correo)
+                                if existe_correo == True:
+                                    # Verificamos que ese arbitro no haya evaluado este articulo
+                                    ya_evaluo = clei.verificar_arbitro_evaluo(id_articulo, correo)
+                                    if  ya_evaluo == False:
+                                        while True:
+                                            puntaje = get_number('    Ingrese el puntaje')
+                                            # Si el puntaje esta en el rango de 1 a 5
+                                            if puntaje >= 1 and puntaje <= 5:
+                                                cont = clei.asignar_arbitro_puntuacion(id_articulo, correo, puntaje)
+                                            else: 
+                                                print 'La nota debe ser de 1 a 5. Intentelo de nuevo'
+                                            break
+                                    else:
+                                        print 'Este miembro de comite ya evaluo este articulo'
+
+                                    r = raw_input('    Agregar otro arbitro (s/n):' )
+                                    if r == 'N' or r == 'n':
+                                        break
+                                else:
+                                    print 'No existe arbitro con ese correo'
+
+                            clei.agregar_evaluaciones(id_articulo, cont)
+                        else:
+                            print '\nNo existe articulo con ese id\n'    
+
+                    elif res == 'n' or res == 'N':
+                        clei.crear_aceptables()
+                        break
+                    else:
+                        print 'Indique s/n'
+
+                    print clei.evaluaciones
+                else:
+                    print '''No hay informacion suficiente para realizar esta operacion. Verifique que haya creado articulos
+    y miembros de comite de programa''' 
                     break
 
-                elif opcion == 1:
-                    clei.crear_articulos()
-                    
-                elif opcion == 2:
-                    clei.crear_miembros_cp()
+        #########################################################
+        #
+        #
+        #Codigo a implementar para el 
+        #sistema de inscripcion de usuarios
+        #
+        #
+        #########################################################
+        elif opcion == 5:
 
-                elif opcion == 3:
-                    clei.asignar_presidente_comite()
+            while True:
+                    res = get_string('\nDesea agregar un nuevo miembro? (s/n)')
+                    if res == 's' or res == 'S':
 
-                elif opcion == 4:
-                    clei.asignar_puntuacion_arbitros_articulos()
-
-                #########################################################
-                #
-                #
-                #Codigo a implementar para el 
-                #sistema de inscripcion de usuarios
-                #
-                #
-                #########################################################
-                elif opcion == 5:
-                    
-                    while True:
-                        try:
-                            res = raw_input('\nDesea agregar un nuevo miembro? (s/n): ')
-                            if res == 's' or res == 'S':
-                                
-                                nombre = pedir('Nombre')
-                                apellido = pedir('Apellido')
-                                institucion = pedir_institucion()
-                                while True:
-                                    correo = pedir_correo()
-                                    if correo in inscritos:
-                                        res = raw_input('Este correo ya esta siendo utilizado, desea introducir otro correo? (s/n): ')
-                                        if res == 'n' or res == 'N':
-                                            break
-                                        elif res != 's' or res != 'S':
-                                            print 'respuesta invalida'
-                                    else:
-                #Actualmente agrega la persona a la lista
-                #Eventualmente debe agregar, de alguna forma, el paquete al que esta asociado
-                #y quizas si es autor o no (por discutir)
-                                        inscritos[correo] = Persona(nombre, apellido, institucion, correo)
-                                        break
-                                
-                            elif res == 'n' or res == 'N':
-                                break
-                            
+                        nombre = pedir('Nombre')
+                        apellido = pedir('Apellido')
+                        institucion = pedir_institucion()
+                        while True:
+                            correo = pedir_correo()
+                            if correo in inscritos:
+                                res = get_string('Este correo ya esta siendo utilizado, desea introducir otro correo? (s/n): ')
+                                if res == 'n' or res == 'N':
+                                    break
+                                elif res != 's' or res != 'S':
+                                    print 'respuesta invalida'
                             else:
-                                print 'Respuesta invalida\n'
-                        except ValueError:
-                            print 'Opcion invalida\n'    
-                 
-                elif opcion == 6:
-                
-                    for  x in sorted(inscritos):
-                        print '\n nombre     : ' + inscritos[x].nombre_completo()
-                        print '   institucion: ' + inscritos[x].get_inst_afil()
-                        print '   correo     : ' + inscritos[x].get_correo() + '\n'
-      
-                        
-                ####################################################
-                #
-                #
-                ####################################################
-    
-            except ValueError:
-                print 'Opcion invalida\n'
-    except ValueError:
-        print 'Opcion invalida\n'   
+        #Actualmente agrega la persona a la lista
+        #Eventualmente debe agregar, de alguna forma, el paquete al que esta asociado
+        #y quizas si es autor o no (por discutir)
+                                inscritos[correo] = Persona(nombre, apellido, institucion, correo)
+                                break
+
+                    elif res == 'n' or res == 'N':
+                        break
+
+                    else:
+                        print 'Respuesta invalida\n'    
+
+        elif opcion == 6:
+
+            for  x in sorted(inscritos):
+                print '\n nombre     : ' + inscritos[x].nombre_completo()
+                print '   institucion: ' + inscritos[x].get_inst_afil()
+                print '   correo     : ' + inscritos[x].get_correo() + '\n'
+
 
     while True:
         print '-----  PROCESO DE SELECCION DE ARTICULOS -----'
         print '1. Desempate por presidente de comite\n'
+        print '2. Articulos escogidos por pais\n'
         print '0. SALIR'
-        try:
-            opcion = int(raw_input('Indique el tipo de seleccion de articulos que desea utilizar: '))
-            if opcion == 0:
-                break
+        
+        opcion = get_number('Indique el tipo de seleccion de articulos que desea utilizar')
+        if opcion == 0:
+            break
 
-            elif opcion == 1:
-                nueva_lista_aceptados = clei.seleccion_desempate()
-                break
-                    
-        # Except del try opcion
-        except ValueError:
-            print 'Opcion invalida'
+        elif opcion == 1:
+            correo_presi = get_string('Indique su correo como presidente')
+            # si el correo pertenece al correo de los miembros registrados
+            existe_correo = clei.verificar_correo(correo_presi)
+            if existe_correo == True:
+                # Verificamos que el correo ingresado sea el correo del presidente
+                if clei.miembros_cp[correo_presi].get_es_presidente() == True:
+                    print '-----------------------------------------------'
+                    print 'Bienvenido presidente del comite de programa.\n'
+                    print '\nElija entre las siguientes opciones:\n'
+
+                    while True:
+                        print ' 1. Ver lista de articulos aceptables.\n'
+                        print ' 2. Generar articulos a ser aceptados en la conferencia.\n'
+                        print ' 0. SALIR'
+                        res = get_number('   Indique el tipo de operacion')
+
+                        if res == 0:
+                            print 'Finalizo la seleccion de articulos'
+                            break
+
+                        elif res == 1:
+                            print 'ACEPTABLES: ', clei.get_aceptables()
+
+                        elif res == 2:
+                            tam_aceptables = len(clei.get_aceptables())
+                            print 'tam aceptables: ', tam_aceptables
+                            limite = clei.crear_aceptados_empatados(tam_aceptables)
+
+                            # Caso en que quedan articulos en la lista de empatados.
+                            if len(clei.get_empatados()) != 0:
+                                # Caso en que queda espacio en la lista de aceptados
+                                if limite != 0:
+                                    print 'A continuacion se le presentan la lista de los articulos pertenecientes a la lista de empatados: \n'
+                                    print clei.get_empatados()
+                                    print '\nA continuacion se le presentan la lista de los articulos que ya pertenecen a la lista de aceptados: \n'
+                                    print clei.get_aceptados()
+                                    print '\nEspacio restante en la lista de empatados: ', limite
+                                    print '\nEscoja de entre los empatados aquellos que pasaran a los aceptados:\n'
+
+                                    # Mientras haya espacio en la lista de aceptados
+                                    while limite>0:
+                                        id = get_number(' Indique id del articulo a seleccionar')
+                                        # Si el id pertenece a la lista de empatados
+                                        clei.seleccionar_desempate(id)
+
+                                else:
+                                    print 'La lista de articulos aceptados ya esta llena.\n'
+                                    break
+
+                            # Si no hay articulos en la lista de empatados no se realiza
+                            # escogencia
+                            else:
+                                print 'No existen articulos en la lista de empatados.\n'
+                                break
+
+                else:
+                    print 'Lo sentimos, ud no esta autorizado para esta operacion...'
+
+            else:
+                print 'Lo sentimos, este correo no pertenece a los miembros del comite. Intente de nuevo'
+
+        elif opcion == 2:
+            num = get_number('Indique el minimo de articulos por pais')
+            lista_paises = clei.seleccionar_por_pais(num)
+            print 'Lista de los paises: ', lista_paises
                  
 if __name__ == '__main__':
     main()

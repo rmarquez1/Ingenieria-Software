@@ -1,4 +1,5 @@
 from Persona import Autor
+from Topico import *
 
 # ------------------------------------------------------------------------------
 # Clase que implementa informacion de los articulos del congreso
@@ -16,6 +17,7 @@ class Articulo():
         self.arbitro = []
         self.puntuacion = []
         self.autores = []
+        self.topicos = []
         self.p_claves.append(p1)
         if p2 != None:
             self.p_claves.append(p2)
@@ -62,6 +64,10 @@ class Articulo():
     def get_puntuacion(self):
         return self.puntuacion
     
+    # Metodo que retorna la lista de topicos
+    def get_topicos(self):
+        return self.topicos
+    
     # Agrega el id al articulo
     def set_id_articulo(self, id_articulo):
         self.id_articulo = id_articulo
@@ -93,7 +99,13 @@ class Articulo():
     def set_autores(self, nombre, inst_afil, pais):
         autor = Autor(nombre, inst_afil, pais)
         self.autores.append(autor)
-        
+    
+    # Inserta en la lista de topicos un topico
+    def set_topicos(self, nombre_topico):
+        topico = Topico(nombre_topico)
+        self.topicos.append(topico)
+    
+    # Imprime los autores de un articulos
     def imprimir_autores(self):
         tam_autores = len(self.autores)
         for i in range(tam_autores):

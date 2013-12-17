@@ -157,11 +157,11 @@ class CLEITester(unittest.TestCase):
         
         
         lista_paises = clei.paises_conferencia()
-        print 'Lista conferencia: ', lista_paises
+        #print 'Lista conferencia: ', lista_paises
 
     # Test de articulos presentados por un pais y que sean considerados como
     # aceptables
-    def testArticulosPais(self):
+    def testNotasArticulosPais(self):
         clei = CLEI(3)
         articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
                             'software')
@@ -206,12 +206,13 @@ class CLEITester(unittest.TestCase):
         clei.set_aceptables(3,3)
         clei.set_aceptables(4,5)
         
-        lista_por_pais = clei.listar_articulos_por_pais('Venezuela')
-        print 'Lista de articulos de Venezuela: ', lista_por_pais
+        lista_por_pais = clei.listar_notas_por_pais('Venezuela')
+        #print 'Lista de articulos de Venezuela: ', lista_por_pais
+        self.assertEquals(len(lista_por_pais), 3)
              
 
     # Test de seleccion de articulos por pais
-    def testSeleccionarPorPais(self):
+    def testListarPorPais(self):
         clei = CLEI(3)
         articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
                             'software')
@@ -259,7 +260,11 @@ class CLEITester(unittest.TestCase):
                              'Clase')
 
         articulo7.set_autores('Francis', 'USB', 'Canada')
-        
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
         
         clei.crear_articulos(1, articulo)
         clei.crear_articulos(2, articulo1)
@@ -269,6 +274,7 @@ class CLEITester(unittest.TestCase):
         clei.crear_articulos(6, articulo5)
         clei.crear_articulos(7, articulo6)
         clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
 
         
         
@@ -290,13 +296,113 @@ class CLEITester(unittest.TestCase):
         clei.agregar_evaluaciones(7, cont)
         cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
         clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
         print clei.get_aceptables()
         # ------------------------------------------------------------
         # Probando seleccion
-        lista_paises = clei.seleccionar_por_pais(2)
+        lista_paises = clei.listar_articulos_por_pais(2)
         print 'Lista por pais: ', lista_paises
+
+    # Test de cantidad minima de articulos
+    def testCantidadMinPais(self):
+        clei = CLEI(3)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
+
+        
+        
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
+        
+        clei.crear_aceptables()
+        print clei.get_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        lista_min = clei.cantidad_min_articulos(2)
+        print 'Lista de minimos por pais: ', lista_min 
+        aceptados = clei.seleccion_por_pais(2)
+        clei.mostrar_empatados()
+        clei.mostrar_aceptados()
         
 
 
@@ -552,16 +658,17 @@ def main():
                         elif res == 2:
                             tam_aceptables = len(clei.get_aceptables())
                             print 'tam aceptables: ', tam_aceptables
-                            limite = clei.crear_aceptados_empatados(tam_aceptables)
+                            promedios = clei.listar_promedios(clei.get_aceptables())
+                            limite = clei.crear_aceptados_empatados(promedios, clei.get_aceptables())
 
                             # Caso en que quedan articulos en la lista de empatados.
                             if len(clei.get_empatados()) != 0:
                                 # Caso en que queda espacio en la lista de aceptados
                                 if limite != 0:
-                                    print 'A continuacion se le presentan la lista de los articulos pertenecientes a la lista de empatados: \n'
-                                    print clei.get_empatados()
-                                    print '\nA continuacion se le presentan la lista de los articulos que ya pertenecen a la lista de aceptados: \n'
-                                    print clei.get_aceptados()
+                                    print 'A continuacion se le presentan los articulos pertenecientes a la lista de empatados: \n'
+                                    print clei.mostrar_empatados()
+                                    print '\nA continuacion se le presentan los articulos que ya pertenecen a la lista de aceptados: \n'
+                                    print clei.mostrar_aceptados()
                                     print '\nEspacio restante en la lista de empatados: ', limite
                                     print '\nEscoja de entre los empatados aquellos que pasaran a los aceptados:\n'
 
@@ -570,6 +677,11 @@ def main():
                                         id = get_number(' Indique id del articulo a seleccionar')
                                         # Si el id pertenece a la lista de empatados
                                         clei.seleccionar_desempate(id)
+                                        limite -= 1
+                                        
+                                    print 'Los articulos aceptados son: '
+                                    clei.mostrar_aceptados()
+                                    break
 
                                 else:
                                     print 'La lista de articulos aceptados ya esta llena.\n'
@@ -589,8 +701,9 @@ def main():
 
         elif opcion == 2:
             num = get_number('Indique el minimo de articulos por pais')
-            lista_paises = clei.seleccionar_por_pais(num)
-            print 'Lista de los paises: ', lista_paises
+            aceptados = clei.seleccion_por_pais(num)
+            #if len(aceptados) < clei.get_num_articulos():
+                
                  
 if __name__ == '__main__':
-    main()
+   main()

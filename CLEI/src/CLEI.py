@@ -158,18 +158,18 @@ class CLEI():
         return promedios
 
     # Metodo que crea las listas de empatados y aceptados
-    def crear_aceptados_empatados(self, tam_aceptables):
-        promedios = self.listar_promedios(self.get_aceptables())
-
+    def crear_aceptados_empatados(self, promedios, lista):
+        tam = len(promedios)
         i = 0
         j = 0
         
         # Ciclo que recorre la lista de promedios y cuenta las veces en que 
         # aparece un promedio para insertarlo en la lista de aceptados o
         # empatados
-        while i<tam_aceptables:
+        while i<tam:
             # Se cuenta las veces en que aparece el valor de promedios[i]
             contar = promedios.count(promedios[i])
+            print 'Contar: ', contar
             
             # Llenando lista de ACEPTADOS
             # Si contar es menor a la cantidad de articulos que deben ser
@@ -180,7 +180,7 @@ class CLEI():
                 # variable que cuenta las veces que debe ingresar un elemento a
                 # la lista de acuerdo a la variable contar
                 temp = 0
-                while j < tam_aceptables:
+                while j < tam:
                     
                     # Caso en que aun no se han agregado la cantidad de articulos
                     # indicados por la variable contar
@@ -189,7 +189,7 @@ class CLEI():
                         # aceptado
                         
                         # Agregamos el id del articulo a la lista de aceptados
-                        id_articulo = self.get_aceptables()[j][0]
+                        id_articulo = lista[j][0]
                         self.set_aceptados(id_articulo)
                         
                         # Asignamos True al atributo aceptado del articulo
@@ -211,13 +211,13 @@ class CLEI():
                 # variable que cuenta las veces que debe ingresar un elemento a
                 # la lista de acuerdo a la variable contar
                 temp = 0
-                while j < tam_aceptables:
+                while j < tam:
                     
                     # Caso en que aun no se han agregado la cantidad de articulos
                     # indicados por la variable contar
                     if temp != contar:
                         # Agregamos a la lista de empatados
-                        self.set_empatados(self.get_aceptables()[j][0])
+                        self.set_empatados(lista[j][0])
                         j = j + 1
                         # Sumamos uno a la variable temporal
                         temp = temp + 1
@@ -241,12 +241,8 @@ class CLEI():
     def seleccionar_desempate(self, id):
         if id in self.get_empatados():
             self.set_aceptados(id)
-            limite -= 1
         else:
             print 'Este id no esta en la lista de empatados'
-
-
-        return self.get_aceptados()
 
     # Retorna una lista con los ids de los articulos pertenecientes a la lista
     # de aceptables
@@ -278,22 +274,23 @@ class CLEI():
                 lista_paises.append(pais)
                 
         return lista_paises
-
-    # Genera una lista con los articulos que estan en la lista de aceptables
-    # pertenecientes a un pais dado
-    def listar_articulos_por_pais(self, pais):
-        lista_articulos_por_pais = []
-        # Generamos los id de los articulos que estan en aceptables
-        lista_id_articulos = self.listar_id_aceptables()
-        tam_lista = len(lista_id_articulos)
-        for i in range(tam_lista):
-            # Si el pais es el mismo al indicado insertamos en la lista
-            if self.articulos[lista_id_articulos[i]].get_autores()[0].get_pais() == pais:
-                lista_articulos_por_pais.append(lista_id_articulos[i])
-        return lista_articulos_por_pais
     
-    # Tipo de seleccion de articulos escogidos por pais
-    def seleccionar_por_pais(self, num_articulos_por_pais):
+    # Retorna una lista con las notas de los articulos presentados por un pais
+    # dado y que pertenece a la lista de aceptables
+    def listar_notas_por_pais(self, pais):
+        lista_notas = []
+        tam_aceptables = len(self.aceptables)
+        # Ciclo que verifica que el pais de cada articulo sea igual al dado 
+        # y este es insertado en la lista
+        for i in range(tam_aceptables):
+            if self.articulos[self.aceptables[i][0]].get_autores()[0].get_pais() == pais:
+                lista_notas.append(self.aceptables[i])
+        # Ordenamos de mayor a menor por nota
+        lista_notas.sort(key=lambda x:x[1], reverse = True)
+        return lista_notas
+
+    # Retorna una lista cuyos elementos son tuplas (pais, [lista de notas])
+    def listar_articulos_por_pais(self, num_articulos_por_pais):
         # Creamos una lista que contendra tuplas ('Pais', [articulos])
         lista_paises = []
         # Generemos lista de los paises cuyos articulos son aceptables
@@ -301,18 +298,71 @@ class CLEI():
         tam_lista = len(lista)
         for i in range(tam_lista):
             # Obtenemos una lista con los articulos del pais en la posicion i
-            lista_articulos_por_pais = self.listar_articulos_por_pais(lista[i])
-            tam_lista_pais = len(lista_articulos_por_pais)
+            lista_notas_por_pais = self.listar_notas_por_pais(lista[i])
+            tam_lista_pais = len(lista_notas_por_pais)
             # Si la cantidad de articulos del pais es mayor o igual al minimo 
             # de articulos por pais
             if tam_lista_pais >= num_articulos_por_pais:
                 l = []
                 for j in range(tam_lista_pais):
-                    l.append(lista_articulos_por_pais[j])
+                    l.append(lista_notas_por_pais[j])
                 # Creamos una tupla ('Pais', [articulos])
                 t = (lista[i], l)
                 # Agregas a la lista paises
                 lista_paises.append(t)
-                
+            # Ordenamos la lista de menor a mayor dependiendo de la cantidad de
+            # articulos aceptables por pais
+            lista_paises.sort(key=lambda x:len(x[1]))
         return lista_paises
+    
+    # Retorna una lista con las tuplas (pais, [lista de notas]) donde esa lista
+    # de notas contiene la cantidad minima de articulos
+    def cantidad_min_articulos(self, num_articulos_por_pais):
+        lista_min = []
+        lista_paises = self.listar_articulos_por_pais(num_articulos_por_pais)
+        tam_lista_paises = len(lista_paises)
+        
+        for i in range(tam_lista_paises):
+            # Tamanio de la lista de notas de cada pais
+            tam = len(lista_paises[i][1])
+            j = 0
+            # Creamos una lista que contendra los articulos (notas)
+            l = []
+            # Ciclo que agrega en una lista el numero minimo de articulos por 
+            # pais
+            while j < num_articulos_por_pais:
+                l.append(lista_paises[i][1][j])
+                #del lista_paises[i][1][j]
+                j += 1
+                # Eliminamos la nota que agregamos a la lista
+                
+            t = (lista_paises[i][0], l)
+            lista_min.append(t)
+        #print 'Lista_ PAISES: ', lista_paises
+        return lista_min
+    
+    # Tipo de seleccion por pais
+    def seleccion_por_pais(self, num_articulos_por_pais):
+        lista_minimos = self.cantidad_min_articulos(num_articulos_por_pais)
+        tam_minimos = len(lista_minimos)
+        for i in range(tam_minimos):
+            # Obtengo los promedios del pais i
+            promedios = self.listar_promedios(lista_minimos[i][1])
+            print 'Promedios: ', promedios
+            tam = len(lista_minimos[i][1])
+            self.crear_aceptados_empatados(promedios, lista_minimos[i][1])
+        return self.aceptados
+
+    # Imprime los elementos de la lista de empatados
+    def mostrar_empatados(self):
+        tam = len(self.empatados)
+        for i in range(tam):
+            pais = self.articulos[self.empatados[i]].get_autores()[0].get_pais()
+            print '(', pais, ', ', self.empatados[i], ')'
                     
+    # Imprime los elementos de la lista de aceptados
+    def mostrar_aceptados(self):
+        tam = len(self.aceptados)
+        for i in range(tam):
+            pais = self.articulos[self.aceptados[i]].get_autores()[0].get_pais()
+            print '(', pais, ', ', self.aceptados[i], ')'

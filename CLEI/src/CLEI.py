@@ -169,7 +169,6 @@ class CLEI():
         while i<tam:
             # Se cuenta las veces en que aparece el valor de promedios[i]
             contar = promedios.count(promedios[i])
-            print 'Contar: ', contar
             
             # Llenando lista de ACEPTADOS
             # Si contar es menor a la cantidad de articulos que deben ser
@@ -342,27 +341,80 @@ class CLEI():
         return lista_min
     
     # Tipo de seleccion por pais
-    def seleccion_por_pais(self, num_articulos_por_pais):
+    def agregar_aceptados(self, num_articulos_por_pais):
         lista_minimos = self.cantidad_min_articulos(num_articulos_por_pais)
         tam_minimos = len(lista_minimos)
         for i in range(tam_minimos):
-            # Obtengo los promedios del pais i
-            promedios = self.listar_promedios(lista_minimos[i][1])
-            print 'Promedios: ', promedios
             tam = len(lista_minimos[i][1])
-            self.crear_aceptados_empatados(promedios, lista_minimos[i][1])
-        return self.aceptados
+            j = 0
+            while j < tam:
+                # Insertamos a la lista de aceptados
+                self.set_aceptados(lista_minimos[i][1][j][0])
+                self.num_articulos -= 1 
+                j += 1
+        return self.num_articulos
 
     # Imprime los elementos de la lista de empatados
     def mostrar_empatados(self):
         tam = len(self.empatados)
         for i in range(tam):
             pais = self.articulos[self.empatados[i]].get_autores()[0].get_pais()
-            print '(', pais, ', ', self.empatados[i], ')'
+            print '( Pais: ', pais, ', id: ', self.empatados[i], ')'
                     
     # Imprime los elementos de la lista de aceptados
     def mostrar_aceptados(self):
         tam = len(self.aceptados)
         for i in range(tam):
             pais = self.articulos[self.aceptados[i]].get_autores()[0].get_pais()
-            print '(', pais, ', ', self.aceptados[i], ')'
+            print '( Pais: ', pais, ', id: ', self.aceptados[i], ')'
+            
+    # Metodo que muestra los paises de menos representados a mas representados
+    def mostrar_representados_ascendentes(self, num_articulos_por_pais):
+        lista_paises = self.listar_articulos_por_pais(num_articulos_por_pais)
+        tam = len(lista_paises)
+        for i in range(tam):
+            print lista_paises[i]
+            
+    # Metodo que genera una lista de aquellos articulos que no estan en la lista
+    # de aceptados
+    def listar_no_aceptados(self,num_articulos_por_pais):
+        # Generamos una lista donde estaran los articulos que aun no han
+        # sido aceptados
+        lista_por_seleccionar = []
+        lista_articulos = self.listar_articulos_por_pais(num_articulos_por_pais)
+        tam_paises = len(lista_articulos)
+        for i in range(tam_paises):
+            # Generamos una lista con los articulos representados del pais i
+            lista = self.listar_notas_por_pais(lista_articulos[i][0])
+            #print 'lista articulos: '
+            #print lista
+            l = []
+            tam = len(lista)
+            # Ciclo que construye una lista con aquellos paises y sus articulos
+            # que aun no pertenecen a la lista aceptados. Esto para manejar
+            # la escogencia de articulos cuando el numero de articulos es mayor
+            # que la cantidad de articulos aceptados por el momento
+            for j in range(tam):
+                
+                res = lista[j][0] in self.aceptados
+                # Caso en que el id del articulo no pertenezca a los aceptados
+                if res == False:
+                    l.append(lista[j])
+            # Caso en que se consiguio articulos que no han sido aceptados
+            if len(l) != 0:
+                t = (lista_articulos[i][0], l)
+                lista_por_seleccionar.append(t)
+                    
+        return lista_por_seleccionar
+
+    # Metodo que selecciona los articulos restantes para completar la capacidad
+    # maximo de articulos escogidos en la conferencia
+    def seleccionar_por_pais(self, num_articulos_por_pais):
+        lista_no_aceptados = self.listar_no_aceptados(num_articulos_por_pais)
+        tam_lista = len(lista_no_aceptados)
+        
+        for i in range(tam_lista):
+            promedios = self.listar_promedios(lista_no_aceptados[i][1])
+            self.crear_aceptados_empatados(promedios, lista_no_aceptados[i][1])
+            
+        

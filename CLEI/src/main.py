@@ -207,11 +207,12 @@ class CLEITester(unittest.TestCase):
         clei.set_aceptables(4,5)
         
         lista_por_pais = clei.listar_notas_por_pais('Venezuela')
-        #print 'Lista de articulos de Venezuela: ', lista_por_pais
         self.assertEquals(len(lista_por_pais), 3)
-             
+        self.assertEquals(5, lista_por_pais[0][1])
+        self.assertEquals(4.5, lista_por_pais[1][1])
+        self.assertEquals(4, lista_por_pais[2][1])
 
-    # Test de seleccion de articulos por pais
+    # Test de lisar los articulos aceptables por pais
     def testListarPorPais(self):
         clei = CLEI(3)
         articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
@@ -276,8 +277,6 @@ class CLEITester(unittest.TestCase):
         clei.crear_articulos(8, articulo7)
         clei.crear_articulos(9, articulo8)
 
-        
-        
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
         cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
@@ -300,15 +299,15 @@ class CLEITester(unittest.TestCase):
         clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
-        print clei.get_aceptables()
-        # ------------------------------------------------------------
-        # Probando seleccion
+
         lista_paises = clei.listar_articulos_por_pais(2)
-        print 'Lista por pais: ', lista_paises
+        self.assertEquals(len(lista_paises[0][1]), 2)
+        self.assertEquals(len(lista_paises[1][1]), 3)
+        self.assertEquals(len(lista_paises[2][1]), 4)
 
     # Test de cantidad minima de articulos
     def testCantidadMinPais(self):
-        clei = CLEI(3)
+        clei = CLEI(6)
         articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
                             'software')
         
@@ -395,20 +394,698 @@ class CLEITester(unittest.TestCase):
         clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
-        print clei.get_aceptables()
         # ------------------------------------------------------------
         # Probando seleccion
         lista_min = clei.cantidad_min_articulos(2)
-        print 'Lista de minimos por pais: ', lista_min 
-        aceptados = clei.seleccion_por_pais(2)
-        clei.mostrar_empatados()
-        clei.mostrar_aceptados()
+        self.assertEquals(len(lista_min[0][1]), 2)
+        self.assertEquals(len(lista_min[1][1]), 2)
+        self.assertEquals(len(lista_min[2][1]), 2)
+
+    # Test de agregacion a la lista de aceptados la cantidad minima por pais
+    def testAgregarAceptados(self):
+        # ---------------------------------------------------------------------
+        clei = CLEI(6)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
         
-
-
-                
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
         
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
 
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
+
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
+        
+        clei.crear_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        num_articulos = clei.agregar_aceptados(2)
+        self.assertEquals(0, num_articulos)
+
+        # ---------------------------------------------------------------
+        # Prueba 2        
+        # ---------------------------------------------------------------
+        clei = CLEI(7)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
+
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
+        
+        clei.crear_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        num_articulos = clei.agregar_aceptados(2)
+        self.assertEquals(1, num_articulos)
+
+        # ---------------------------------------------------------------
+        # Prueba 3        
+        # ---------------------------------------------------------------
+        clei = CLEI(10)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
+
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
+        
+        clei.crear_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        num_articulos = clei.agregar_aceptados(2)
+        self.assertEquals(4, num_articulos)
+
+
+    # Test de cantidad minima de articulos
+    def testSeleccionPais(self):
+        # ---------------------------------------------------------------------
+        clei = CLEI(6)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
+
+        
+        
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
+        
+        clei.crear_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        num_articulos = clei.agregar_aceptados(2)
+        self.assertEquals(0, num_articulos)
+
+        # ---------------------------------------------------------------
+        # Prueba 2        
+        # ---------------------------------------------------------------
+        clei = CLEI(7)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
+
+        articulo9 = Articulo(10, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo9.set_autores('Irene', 'USB', 'Venezuela')
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
+        clei.crear_articulos(10, articulo9)
+
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
+        cont = clei.asignar_arbitro_puntuacion(10, 'correo', 4)
+        clei.agregar_evaluaciones(10, cont)
+        
+        clei.crear_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        num_articulos = clei.agregar_aceptados(2)
+        clei.seleccionar_por_pais(2)
+        self.assertEquals(0, clei.get_num_articulos())
+
+
+        # ---------------------------------------------------------------
+        # Prueba 3        
+        # ---------------------------------------------------------------
+        clei = CLEI(8)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
+
+        articulo9 = Articulo(10, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo9.set_autores('Irene', 'USB', 'Venezuela')
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
+        clei.crear_articulos(10, articulo9)
+
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
+        cont = clei.asignar_arbitro_puntuacion(10, 'correo', 4)
+        clei.agregar_evaluaciones(10, cont)
+        
+        clei.crear_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        num_articulos = clei.agregar_aceptados(2)
+        clei.seleccionar_por_pais(2)
+        self.assertEquals(1, clei.get_num_articulos())
+        
+        # ---------------------------------------------------------------
+        # Prueba 4        
+        # ---------------------------------------------------------------
+        clei = CLEI(10)
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
+                            'software')
+        
+        articulo.set_autores('Ramon', 'USB', 'Venezuela')
+        articulo.set_autores('Jesus', 'USB', 'Colombia')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
+                             'informacion', 'tecnologia')
+
+        articulo1.set_autores('Marcos', 'USB', 'Venezuela')
+        articulo1.set_autores('Jose', 'USB', 'Mexico')
+        articulo1.set_autores('Andreina', 'UCV', 'Venezuela')
+        articulo1.set_autores('Sofia', 'UCV', 'Colombia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 'Texto articulo2',
+                             'Automata', 'Lenguaje', 'Deterministico')
+
+        articulo2.set_autores('Maria', 'USB', 'Canada')
+        articulo2.set_autores('Carolina', 'USB', 'Mexico')
+
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3', 'Texto articulo3',
+                             'Conjuntos', 'Familia', 'Interseccion', 'Inversa')
+
+        articulo3.set_autores('Andres', 'USB', 'Venezuela')
+        articulo3.set_autores('Marta', 'USB', 'Brazil')
+        
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 'Texto articulo4',
+                             'Clase', 'Diseno', 'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        articulo4.set_autores('Jeremy', 'USB', 'Chile')
+        articulo4.set_autores('Johandrick', 'USB', 'Argentina')
+        
+        articulo5 = Articulo(6, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo5.set_autores('Jordan', 'USB', 'Chile')
+        
+        articulo6 = Articulo(7, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo6.set_autores('Julia', 'USB', 'Chile')
+
+        articulo7 = Articulo(8, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo7.set_autores('Francis', 'USB', 'Canada')
+
+        articulo8 = Articulo(9, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo8.set_autores('Francisco', 'USB', 'Venezuela')
+
+        articulo9 = Articulo(10, 'Software1', 'Resumen articulo', 'Texto articulo',
+                             'Clase')
+
+        articulo9.set_autores('Irene', 'USB', 'Venezuela')
+        
+        clei.crear_articulos(1, articulo)
+        clei.crear_articulos(2, articulo1)
+        clei.crear_articulos(3, articulo2)
+        clei.crear_articulos(4, articulo3)
+        clei.crear_articulos(5, articulo4)
+        clei.crear_articulos(6, articulo5)
+        clei.crear_articulos(7, articulo6)
+        clei.crear_articulos(8, articulo7)
+        clei.crear_articulos(9, articulo8)
+        clei.crear_articulos(10, articulo9)
+
+        # ------------------------------------------------------------
+        # Se agregan los arbitros puntuaciones y evaluaciones
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        clei.agregar_evaluaciones(4, cont)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        clei.agregar_evaluaciones(7, cont)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        clei.agregar_evaluaciones(9, cont)
+        cont = clei.asignar_arbitro_puntuacion(10, 'correo', 4)
+        clei.agregar_evaluaciones(10, cont)
+        
+        clei.crear_aceptables()
+        # ------------------------------------------------------------
+        # Probando seleccion
+        num_articulos = clei.agregar_aceptados(2)
+        clei.seleccionar_por_pais(2)
+        self.assertEquals(0, clei.get_num_articulos())
+
+# -----------------------------------------------------------------------------
+#                               MAIN PRINCIPAL
+# -----------------------------------------------------------------------------
 def main():
     print '\n ----------- BIENVENIDO AL SISTEMA CLEI ----------\n\n'
     print '                       MENU\n'
@@ -669,13 +1346,12 @@ def main():
                                     print clei.mostrar_empatados()
                                     print '\nA continuacion se le presentan los articulos que ya pertenecen a la lista de aceptados: \n'
                                     print clei.mostrar_aceptados()
-                                    print '\nEspacio restante en la lista de empatados: ', limite
+                                    print '\nEspacio restante en la lista de aceptados: ', limite
                                     print '\nEscoja de entre los empatados aquellos que pasaran a los aceptados:\n'
 
                                     # Mientras haya espacio en la lista de aceptados
                                     while limite>0:
                                         id = get_number(' Indique id del articulo a seleccionar')
-                                        # Si el id pertenece a la lista de empatados
                                         clei.seleccionar_desempate(id)
                                         limite -= 1
                                         
@@ -701,8 +1377,55 @@ def main():
 
         elif opcion == 2:
             num = get_number('Indique el minimo de articulos por pais')
-            aceptados = clei.seleccion_por_pais(num)
-            #if len(aceptados) < clei.get_num_articulos():
+            # Generamos la lista de los paises participantes en la conferencia
+            lista_paises = clei.paises_conferencia()
+            valor = num * len(lista_paises)
+            # Caso en que el el numero minimo de articulos permitidos por pais
+            # por la cantidad de paises participando en la conferencia es menor
+            # o igual a la cantidad de articulos maximo que se permiten en la
+            # conferencia
+            if valor <= clei.get_num_articulos():
+                # Obtenemos lo que nos falta para llenar la lista de aceptados
+                limite = clei.agregar_aceptados(num)
+                # Caso en que halla espacio en la lista de aceptados
+                if limite != 0:
+                    clei.seleccionar_por_pais(num)
+                    # Caso en que haya empates y siga incompleta la lista de 
+                    # aceptados
+                    if clei.get_num_articulos() != 0:
+                        correo_presi = get_string('Indique su correo como presidente')
+                        # si el correo pertenece al correo de los miembros registrados
+                        existe_correo = clei.verificar_correo(correo_presi)
+                        if existe_correo == True:
+                            # Verificamos que el correo ingresado sea el correo del presidente
+                            if clei.miembros_cp[correo_presi].get_es_presidente() == True:
+                                print 'Los empatados se presentan a continuacion: '
+                                clei.mostrar_empatados()
+                                print '\n Los aceptables por el momento son: '
+                                clei.mostrar_aceptados()
+                                print '\nEspacio restante en la lista de aceptados: ', limite
+                                print '\nEscoja de entre los empatados aquellos que pasaran a los aceptados:\n'
+                                # Mientras haya espacio en la lista de aceptados
+                                while limite>0:
+                                    id = get_number(' Indique id del articulo a seleccionar')
+                                    clei.seleccionar_desempate(id)
+                                    limite -= 1
+
+                                print 'Los articulos aceptados son: '
+                                clei.mostrar_aceptados()
+                                break
+                            else:
+                                print 'Lo sentimos, ud no esta autorizado para esta operacion...'
+                        else:
+                            print 'Lo sentimos, este correo no pertenece a los miembros del comite. Intente de nuevo'
+                    else:
+                        print '\nYa los articulos aceptados estan completos\n'
+                else:
+                    print 'Los articulos aceptados son: '
+                    clei.mostrar_aceptados()
+                    break
+            else:
+                print 'El numero minimo de articulos por la cantidad de paises debe ser menor o igual que el numero de articulos en la conferencia'
                 
                  
 if __name__ == '__main__':

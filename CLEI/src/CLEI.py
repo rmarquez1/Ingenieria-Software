@@ -18,6 +18,7 @@ class CLEI():
         self.evaluaciones = {}
         self.inscritos = {}
     
+    # Retorna el numero de articulos que se presentaran en la conferencia
     def get_num_articulos(self):
         return self.num_articulos
     
@@ -47,17 +48,21 @@ class CLEI():
     def set_empatados(self, id_articulo):
         self.empatados.append(id_articulo)
 
+    # Asigna los autores a un articulos
     def asignar_autores(self, id, nombre_autor, inst_afil, pais):
         self.articulos[id].set_autores(nombre_autor, inst_afil, pais)
         
+    # Inserta en el diccionario de articulos y en la lista un articulo
     def crear_articulos(self, id_articulo, articulo):
         self.articulos[id_articulo] = articulo
         self.lista_articulos.append(articulo)
 
+    # Inserta en el diccionario de miembros de cp un miembro
     def crear_miembros_cp(self, nombre, apellido, inst_afil, correo):
         comite = Comite(nombre, apellido, inst_afil,correo)
         self.miembros_cp[correo] = comite
 
+    # Asigna como presidente a un miembro de comite de programa
     def asignar_presidente_comite(self, presidente):
         # Verificamos que no haya otro presidente
         lista_correos = self.miembros_cp.keys()
@@ -106,7 +111,7 @@ class CLEI():
         self.lista_articulos[cont].set_arbitros(correo)
 
         return cont
-        break
+        
 
     # Devuelve una lista con los arbitros y puntuaciones del articulo 
     def lista_arbitro_puntuacion(self, cont):
@@ -115,7 +120,8 @@ class CLEI():
         # Ciclo que agrega a la lista la tupla (arbitro, puntuacion)
         for i in range(len(self.lista_articulos[cont].get_arbitros())):
             # Tupla (arbitro, puntuacion)
-            t = (self.lista_articulos[cont].get_arbitros()[i], self.lista_articulos[cont].get_puntuacion()[i])
+            t = (self.lista_articulos[cont].get_arbitros()[i], 
+                 self.lista_articulos[cont].get_puntuacion()[i])
             # Agregamos a la lista
             lista.append(t)  
              
@@ -145,7 +151,8 @@ class CLEI():
                 # Mas de un arbitro y puntuacion mayor a 3
                 if len(lista_evaluaciones[i][1][0]) >= 1: 
                     if lista_evaluaciones[i][1][1] >= 3.0:
-                        self.set_aceptables(lista_evaluaciones[i][0], lista_evaluaciones[i][1][1])
+                        self.set_aceptables(lista_evaluaciones[i][0], 
+                                            ista_evaluaciones[i][1][1])
 
     # Retorna una lista con los promedios de articulos en una lista dada
     def listar_promedios(self, lista):
@@ -234,7 +241,8 @@ class CLEI():
         lista = self.lista_arbitro_puntuacion(cont)
 
         # Agregamos al diccionario de evaluaciones
-        self.evaluaciones[id_articulo] = lista, self.lista_articulos[cont].calcular_promedio()        
+        promedio = self.lista_articulos[cont].calcular_promedio()
+        self.evaluaciones[id_articulo] = lista, promedio    
     
     # Esquema de seleccion por desempate
     def seleccionar_desempate(self, id):
@@ -282,7 +290,8 @@ class CLEI():
         # Ciclo que verifica que el pais de cada articulo sea igual al dado 
         # y este es insertado en la lista
         for i in range(tam_aceptables):
-            if self.articulos[self.aceptables[i][0]].get_autores()[0].get_pais() == pais:
+            pais1=self.articulos[self.aceptables[i][0]].get_autores()[0].get_pais()
+            if  pais1 == pais:
                 lista_notas.append(self.aceptables[i])
         # Ordenamos de mayor a menor por nota
         lista_notas.sort(key=lambda x:x[1], reverse = True)

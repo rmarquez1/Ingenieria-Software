@@ -7,7 +7,8 @@ from Topico import *
 class Articulo():
 
     # Contructor del articulo
-    def __init__(self, id_articulo=None, titulo=None, resumen=None, texto=None, p1=None, p2=None, p3=None, p4=None,p5=None):
+    def __init__(self, id_articulo=None, titulo=None, resumen=None, 
+                 texto=None, p1=None, p2=None, p3=None, p4=None,p5=None):
         self.id_articulo = id_articulo
         self.titulo = titulo
         self.p_claves = []

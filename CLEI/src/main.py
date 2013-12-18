@@ -1,5 +1,3 @@
-from Articulo import *
-from Persona import *
 from CLEI import *
 from Inscripcion import *
 import sys
@@ -1360,13 +1358,15 @@ def main():
                                     break
 
                                 else:
-                                    print 'La lista de articulos aceptados ya esta llena.\n'
+                                    print 'Los articulos aceptados son: '
+                                    clei.mostrar_aceptados()
                                     break
 
                             # Si no hay articulos en la lista de empatados no se realiza
                             # escogencia
                             else:
-                                print 'No existen articulos en la lista de empatados.\n'
+                                print 'Los articulos aceptados son: '
+                                clei.mostrar_aceptados()
                                 break
 
                 else:
@@ -1419,7 +1419,9 @@ def main():
                         else:
                             print 'Lo sentimos, este correo no pertenece a los miembros del comite. Intente de nuevo'
                     else:
-                        print '\nYa los articulos aceptados estan completos\n'
+                        print 'Los articulos aceptados son: '
+                        clei.mostrar_aceptados()
+                        break
                 else:
                     print 'Los articulos aceptados son: '
                     clei.mostrar_aceptados()
@@ -1429,4 +1431,4 @@ def main():
                 
                  
 if __name__ == '__main__':
-   unittest.main()
+   main()

@@ -152,7 +152,7 @@ class CLEI():
                 if len(lista_evaluaciones[i][1][0]) >= 1: 
                     if lista_evaluaciones[i][1][1] >= 3.0:
                         self.set_aceptables(lista_evaluaciones[i][0], 
-                                            ista_evaluaciones[i][1][1])
+                                            lista_evaluaciones[i][1][1])
 
     # Retorna una lista con los promedios de articulos en una lista dada
     def listar_promedios(self, lista):

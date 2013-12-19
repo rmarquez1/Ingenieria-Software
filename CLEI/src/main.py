@@ -500,6 +500,7 @@ class CLEITester(unittest.TestCase):
         self.assertEquals(len(lista_min[0][1]), 2)
         self.assertEquals(len(lista_min[1][1]), 2)
         self.assertEquals(len(lista_min[2][1]), 2)
+        
 
     # Test de agregacion a la lista de aceptados la cantidad minima por pais
     def testAgregarAceptados(self):
@@ -1298,6 +1299,116 @@ class CLEITester(unittest.TestCase):
         
         clei.seleccionar_por_pais(2)
         self.assertEquals(1, clei.get_num_articulos())
+        
+        #Test de seleccion 
+        #80% por articulo y 20% por nota
+    def testSeleccionEquitativa(self):
+        
+        self.clei = CLEI(30)
+        for i in range(30):
+            self.clei.articulos[i]= Articulo(i)
+            self.clei.articulos[i].set_puntuacion(5)
+            self.clei.articulos[i].set_puntuacion(5)
+        for i in range(3):
+            self.clei.articulos[i].set_autores(1,2,'Venezuela')
+        for i in range(3,9):
+            self.clei.articulos[i].set_autores(1,2,'Peru')
+        for i in range(9,18):
+            self.clei.articulos[i].set_autores(1,2,'Ecuador')    
+        for i in range(18,30):
+            self.clei.articulos[i].set_autores(1,2,'Chile')
+        for i in range(30):
+            self.clei.set_aceptables(i,5)
+
+
+        self.salida = self.clei.seleccion_equitativa(15)
+        self.resultado1=[]
+        self.resultado2=[]
+        self.resultado1=[3, 4, 0, 9, 10, 11, 12, 18, 19, 20, 21, 22]
+        self.resultado2=[1, 2, 5, 6, 7, 8, 13, 14, 15, 16, 17, 23, 24, 25, 26, 27, 28, 29]
+        self.assertEquals(self.salida[0], self.resultado1)
+        self.assertEquals(self.salida[1], self.resultado2)
+        
+        self.clei = CLEI(30)
+        for i in range(20):
+            self.clei.articulos[i]= Articulo(i)
+            self.clei.articulos[i].set_puntuacion(5)
+            self.clei.articulos[i].set_puntuacion(5)
+        for i in range(12):
+            self.clei.articulos[i].set_autores(1,2,'Venezuela')
+        for i in range(12,20):
+            self.clei.articulos[i].set_autores(1,2,'Colombia')
+        for i in range(20):
+            self.clei.set_aceptables(i,5)
+        self.salida = self.clei.seleccion_equitativa(10)
+
+        self.resultado1=[]
+        self.resultado2=[]
+        self.resultado1=[0, 1, 2, 3, 4, 12, 13, 14]
+        self.resultado2=[5, 6, 7, 8, 9, 10, 11, 15, 16, 17, 18, 19]
+        self.assertEquals(self.salida[0], self.resultado1)
+        self.assertEquals(self.salida[1], self.resultado2)
+
+
+        self.clei = CLEI(30)
+        for i in range(60):
+            self.clei.articulos[i]= Articulo(i)
+            self.clei.articulos[i].set_puntuacion(5)
+            self.clei.articulos[i].set_puntuacion(5)
+        for i in range(10):
+            self.clei.articulos[i].set_autores(1,2,'Venezuela')
+        for i in range(20):
+            self.clei.articulos[10+i].set_autores(1,2,'Colombia')
+        for i in range(30):
+            self.clei.articulos[30+i].set_autores(1,2,'Peru')
+        for i in range(60):
+            self.clei.set_aceptables(i,5)
+
+        self.salida = self.clei.seleccion_equitativa(30)
+        
+        self.resultado1=[]
+        self.resultado2=[]
+        self.resultado1=[30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 0, 1, 2, 3, 10, 11, 12, 13, 14, 15, 16, 17]
+        self.resultado2=[4, 5, 6, 7, 8, 9, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59] 
+        self.assertEquals(self.salida[0], self.resultado1)
+        self.assertEquals(self.salida[1], self.resultado2)
+ 
+        
+        
+        self.clei = CLEI(30)
+        self.salida = self.clei.seleccion_equitativa(30)
+        self.resultado1=[]
+        self.resultado2=[]
+        self.resultado1=[]
+        self.resultado2=[] 
+        self.assertEquals(self.salida[0], self.resultado1)
+        self.assertEquals(self.salida[1], self.resultado2)   
+        
+        
+    def testSeleccionTopico(self):
+        self.clei = CLEI(30)
+        for i in range(30):
+            self.clei.articulos[i]= Articulo(i)
+            self.clei.articulos[i].set_puntuacion(5)
+            self.clei.articulos[i].set_puntuacion(5)
+        for i in range(3):
+            self.clei.articulos[i].set_topicos('BD')
+        for i in range(3,9):
+            self.clei.articulos[i].set_topicos('IA')
+        for i in range(9,18):
+            self.clei.articulos[i].set_topicos('SO')    
+        for i in range(18,30):
+            self.clei.articulos[i].set_topicos('SI')
+        for i in range(30):
+            self.clei.set_aceptables(i,5)
+        
+        self.resultado = self.clei.seleccion_topicos(15)
+        self.assertEquals(self.resultado, [0, 9, 10, 11, 12, 3, 4, 5, 18, 19, 20, 21, 22, 23])
+        
+        self.clei = CLEI(30)
+        self.resultado = self.clei.seleccion_topicos(15)
+        self.assertEquals(self.resultado, [])
+    
 
 # -----------------------------------------------------------------------------
 #                               MAIN PRINCIPAL
@@ -1644,7 +1755,90 @@ def main():
                     break
             else:
                 print 'El numero minimo de articulos por la cantidad de paises debe ser menor o igual que el numero de articulos en la conferencia'
-                
+         
+        elif opcion == 5:
+            num = get_number('Indique la cantidad de articulos que seran admitidos')
+            
+            if num <= clei.get_num_articulos():
+                # Obtenemos lo que nos falta para llenar la lista de aceptados
+                admitidos = clei.seleccion_topicos()
+                # Caso en que halla espacio en la lista de aceptados
+                print 'Los articulos aceptados segun su puntuacion y articulos son:'
+                print clei.mostrar_aceptados()
+            else:
+                print 'El numero minimo de articulos por la cantidad de paises debe ser menor o igual que el numero de articulos en la conferencia'
+                        
+        elif opcion == 4:
+            correo_presi = get_string('Indique su correo como presidente')
+            # si el correo pertenece al correo de los miembros registrados
+            existe_correo = clei.verificar_correo(correo_presi)
+            if existe_correo == True:
+                # Verificamos que el correo ingresado sea el correo del presidente
+                if clei.miembros_cp[correo_presi].get_es_presidente() == True:
+                    print '-----------------------------------------------'
+                    print 'Bienvenido presidente del comite de programa.\n'
+                    numero = get_number('Que cantidad de articulos desea admitir?')
+                    lista = clei.seleccion_equitativa(numero)
+
+                    print '\nElija entre las siguientes opciones:\n'
+                    while len(lista[1]) > 0:
+                        print ' 1. Ver lista de articulos empatados.\n'
+                        print ' 2. Seleccionar articulos de la lista de empatados.\n'
+                        print ' 0. SALIR'
+                        res = get_number('   Indique el tipo de operacion')
+
+                        if res == 0:
+                            print 'Finalizo la seleccion de articulos'
+                            break
+
+                        elif res == 1:
+                            print 'EMPATADOS: ', clei.mostrar_empatados()
+
+                        elif res == 2:
+
+                            limite = numero - len(lista[0])
+                            # Caso en que quedan articulos en la lista de empatados.
+                            if len(clei.get_empatados()) != 0:
+                                # Caso en que queda espacio en la lista de aceptados
+                                if limite != 0:
+                                    print 'A continuacion se le presentan los articulos pertenecientes a la lista de empatados: \n'
+                                    print clei.mostrar_empatados()
+                                    print '\nA continuacion se le presentan los articulos que ya pertenecen a la lista de aceptados: \n'
+                                    print clei.mostrar_aceptados()
+                                    print '\nEspacio restante en la lista de aceptados: ', limite
+                                    print '\nEscoja de entre los empatados aquellos que pasaran a los aceptados:\n'
+                                        
+                                    # Mientras haya espacio en la lista de aceptados
+                                    while limite>0:
+                                        id = get_number(' Indique id del articulo a seleccionar')
+                                        if id in lista[1]:
+                                            clei.set_aceptados(lista[1].pop(lista[1].index(id)))
+                                            limite -= 1 
+                                        else:
+                                            print 'el articulo no pertenece a la lista de empatados'
+                                    print 'Los articulos aceptados son: '
+                                    clei.mostrar_aceptados()
+                                    break
+
+                                else:
+                                    print 'Los articulos aceptados son: '
+                                    clei.mostrar_aceptados()
+                                    break
+
+                            # Si no hay articulos en la lista de empatados no se realiza
+                            # escogencia
+                            else:
+                                print 'Los articulos aceptados son: '
+                                clei.mostrar_aceptados()
+                                break
+                    
+                                        
+                else:
+                    print 'Lo sentimos, ud no esta autorizado para esta operacion...'
+
+            else:
+                print 'Lo sentimos, este correo no pertenece a los miembros del comite. Intente de nuevo'
+                 
                  
 if __name__ == '__main__':
    main()

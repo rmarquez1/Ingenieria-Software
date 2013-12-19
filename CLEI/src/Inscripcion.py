@@ -4,10 +4,33 @@
 # Clase que implementa a las personas inscritas
 # ------------------------------------------------------------------------------
 class Inscrito():
-    def __init__(self,persona=None,paquete=None):
+    def __init__(self,persona=None):
         self.persona = persona
-        self.paquete = paquete
+        
+        paquete = pedir_paquete()
+        if paquete == '1':
+            self.paquete = TipoPaqueteCharla()
 
+        elif paquete == '2':
+            self.paquete = TipoPaqueteTaller()
+
+        elif paquete == '3':
+            self.paquete = TipoPaqueteMixto()
+
+        elif paquete == '4':
+            self.paquete = TipoPaqueteAcademico()
+
+        elif paquete == '5':
+            self.paquete = TipoPaqueteTemprano()
+
+        else:
+            print 'Codigo no valido'
+            self.paquete = None
+
+    
+    def get_paquete(self):
+        return self.paquete
+    
     def imprimir_inscrito(self):
         print '\n nombre        : ' + self.persona.nombre_completo()
         print '   institucion : ' + self.persona.get_inst_afil()

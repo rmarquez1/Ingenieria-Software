@@ -1,7 +1,7 @@
 from Articulo import Articulo
 from CLEI import CLEI
-from Persona import Comite
-from Inscripcion import Inscritos
+from Persona import Comite, Persona, pedir, pedir_institucion, pedir_correo
+from Inscripcion import Inscrito
 import sys
 import unittest
 
@@ -26,7 +26,11 @@ def get_string(msg):
     else:
       return str
 # ------------------------------------------------------------------------------
+#
+#
 # Prueba de la clase Articulo
+#
+#
 # ------------------------------------------------------------------------------
 class ArticuloTester(unittest.TestCase):
 
@@ -80,7 +84,11 @@ class ArticuloTester(unittest.TestCase):
                              
 
 # ------------------------------------------------------------------------------
+#
+#
 # Pruebas de la clase Comite
+#
+#
 # ------------------------------------------------------------------------------
 class ComiteTester(unittest.TestCase):
 
@@ -104,7 +112,11 @@ class ComiteTester(unittest.TestCase):
         self.assertTrue(res, 'Debe ser presidente este miembro de comite')
 
 # ------------------------------------------------------------------------------
+#
+#
 # Prueba de la clase CLEI
+#
+#
 # ------------------------------------------------------------------------------
 class CLEITester(unittest.TestCase):
     
@@ -1478,30 +1490,14 @@ def main():
                                     
                             else:
                                 persona = Persona(nombre, apellido, institucion, correo)
-                                paquete = pedir_paquete()
-                                
-                                if paquete == '1':
-                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteCharla())
+                                inscrito = Inscrito(persona)
+                                if inscrito.get_paquete() == None:
+                                    print 'No se pudo inscribir al participante'
                                     break
-                                    
-                                elif paquete == '2':
-                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteTaller())
-                                    break
-
-                                elif paquete == '3':
-                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteMixto())
-                                    break
-                                    
-                                elif paquete == '4':
-                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteAcademico())
-                                    break
-
-                                elif paquete == '5':
-                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteTemprano())
-                                    break
-
                                 else:
+                                    clei.inscritos[correo] = inscrito
                                     break
+                                
 
                     elif res == 'n' or res == 'N':
                         break

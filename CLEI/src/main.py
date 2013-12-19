@@ -2,7 +2,8 @@ from Articulo import Articulo
 from CLEI import CLEI
 from Persona import Comite, Persona, pedir, pedir_institucion, pedir_correo
 from Inscripcion import Inscrito
-
+from Evento import registrar_evento
+from Lugar  import registrar_espacios
 import sys
 import unittest
 

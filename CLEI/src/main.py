@@ -2,6 +2,7 @@ from Articulo import Articulo
 from CLEI import CLEI
 from Persona import Comite, Persona, pedir, pedir_institucion, pedir_correo
 from Inscripcion import Inscrito
+
 import sys
 import unittest
 
@@ -1317,6 +1318,8 @@ def main():
         print '4. Asignar puntuacion y arbitro a un articulo\n'
         print '5. Inscribir un nuevo participante\n'
         print '6. Listar participantes\n'
+        print '7. Sistema de registro de eventos\n'
+        print '8. Registrar espacios donde se realizara la coferencia\n'
         print '0. SALIR'
 
         opcion = get_number(' Indique la operacion que desea realizar')
@@ -1510,7 +1513,10 @@ def main():
             for  x in sorted(clei.inscritos):
                 clei.inscritos[x].imprimir_inscrito()
 
-
+        elif opcion == 7:
+               eventos = registrar_evento()
+        elif opcion == 8:
+               espacios = registrar_espacios()
 
     while True:
         print '-----  PROCESO DE SELECCION DE ARTICULOS -----'

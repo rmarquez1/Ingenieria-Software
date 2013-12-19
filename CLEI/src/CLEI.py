@@ -425,5 +425,6 @@ class CLEI():
         for i in range(tam_lista):
             promedios = self.listar_promedios(lista_no_aceptados[i][1])
             self.crear_aceptados_empatados(promedios, lista_no_aceptados[i][1])
-            
+    
+    
         

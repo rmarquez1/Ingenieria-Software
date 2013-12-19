@@ -1,52 +1,53 @@
 #! /usr/bin/python
 
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
-
-class Inscritos:
+# ------------------------------------------------------------------------------
+# Clase que implementa a las personas inscritas
+# ------------------------------------------------------------------------------
+class Inscrito():
     def __init__(self,persona=None,paquete=None):
         self.persona = persona
         self.paquete = paquete
 
-def pedir(palabraclave):
-    apedir = ''
-    while apedir == '':
-        apedir = raw_input('\nIntroduzca el '+ palabraclave + ' del participante: ')
-        if apedir == '':
-            print ('\n' + palabraclave + ' no valido')
-            
-    return apedir
-
-def pedir_institucion():
-    institucion = ''
-    while institucion == '':
-        institucion = raw_input('\nIntroduzca el nombre de la institucion a la que el participante esta afiliado: ')
-        if institucion == '':
-            print '\nInstitucion invalida'
-    
-    return institucion
-            
-def pedir_correo():
-    usuario = ''
-    while usuario == '':
-        usuario = raw_input('\nIntroduzca el usuario del correo (lo que va antes del @): ')
-            
-        if usuario == '':
-            print '\nUsuario invalido'  
+    def imprimir_inscrito(self):
+        print '\n nombre        : ' + self.persona.nombre_completo()
+        print '   institucion : ' + self.persona.get_inst_afil()
+        print '   correo      : ' + self.persona.get_correo() 
+        print str(self.paquete.paquete())
         
-        elif usuario.find('@') != -1:
-            print '\nEl usuario no puede incluir "@"!'
-            usuario = ''
-    dominio = ''
-    while dominio == '':
-        dominio = raw_input('\nIntroduzca el dominio del correo: ')
-        
-        if dominio == '':
-            print '\nDominio invalido'
-
-        elif dominio.find('.') == -1:
-            print '\nEl formato del dominio no es valido'
-            dominio = ''    
+# ------------------------------------------------------------------------------
+# Clase que implementa los distintos paquetes de inscripcion
+# ------------------------------------------------------------------------------
+class TipoPaquete():
+    def __init__(self):
+        pass
     
-    return usuario+'@'+dominio
+class TipoPaqueteCharla(TipoPaquete):
+    def paquete(self):
+        return "   paquete     : Asistencia exclusiva a charlas"
+
+class TipoPaqueteTaller(TipoPaquete):
+    def paquete(self):
+        return "   paquete     : Asistencia exclusiva a talleres"
+    
+class TipoPaqueteMixto(TipoPaquete):
+    def paquete(self):
+        return"   paquete     : Asistencia a charlas y talleres"
+        
+class TipoPaqueteAcademico(TipoPaquete):
+    def paquete(self):
+        return "   paquete     : Descuento por ser academico"
+        
+class TipoPaqueteTemprano(TipoPaquete):
+    def paquete(self):
+        return "   paquete     : Descuento por compra temprana"
+
+
+def pedir_paquete():
+    print '\nCon que tipo de paquete desea inscribir al participante?'
+    print '1. Asistencia exclusiva a talleres'
+    print '2. Asistencia exclusiva a charlas'
+    print '3. Asistencia a talleres y charlas'
+    print '4. Descuento para academicos'
+    print '5. Descuento para compras tempranas'
+    return raw_input()
+

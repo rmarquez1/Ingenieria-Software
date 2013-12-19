@@ -1267,20 +1267,43 @@ def main():
                         nombre = pedir('Nombre')
                         apellido = pedir('Apellido')
                         institucion = pedir_institucion()
+                        
                         while True:
                             correo = pedir_correo()
-                            if correo in inscritos:
+                            
+                            if correo in clei.inscritos:
                                 res = get_string('Este correo ya esta siendo utilizado, desea introducir otro correo? (s/n): ')
                                 if res == 'n' or res == 'N':
                                     break
                                 elif res != 's' or res != 'S':
                                     print 'respuesta invalida'
+                                    
                             else:
-        #Actualmente agrega la persona a la lista
-        #Eventualmente debe agregar, de alguna forma, el paquete al que esta asociado
-        #y quizas si es autor o no (por discutir)
-                                inscritos[correo] = Persona(nombre, apellido, institucion, correo)
-                                break
+                                persona = Persona(nombre, apellido, institucion, correo)
+                                paquete = pedir_paquete()
+                                
+                                if paquete == '1':
+                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteCharla())
+                                    break
+                                    
+                                elif paquete == '2':
+                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteTaller())
+                                    break
+
+                                elif paquete == '3':
+                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteMixto())
+                                    break
+                                    
+                                elif paquete == '4':
+                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteAcademico())
+                                    break
+
+                                elif paquete == '5':
+                                    clei.inscritos[correo] = Inscrito(persona, TipoPaqueteTemprano())
+                                    break
+
+                                else:
+                                    break
 
                     elif res == 'n' or res == 'N':
                         break
@@ -1290,10 +1313,9 @@ def main():
 
         elif opcion == 6:
 
-            for  x in sorted(inscritos):
-                print '\n nombre     : ' + inscritos[x].nombre_completo()
-                print '   institucion: ' + inscritos[x].get_inst_afil()
-                print '   correo     : ' + inscritos[x].get_correo() + '\n'
+            for  x in sorted(clei.inscritos):
+                clei.inscritos[x].imprimir_inscrito()
+
 
 
     while True:
@@ -1431,4 +1453,4 @@ def main():
                 
                  
 if __name__ == '__main__':
-   unittest.main()
+   main()

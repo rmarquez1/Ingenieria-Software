@@ -24,9 +24,9 @@ class Persona:
    def nombre_completo(self):
        return str(self.nombre)+' '+str(self.apellido)
    
-#---------------------------------------------------------------------------#
-#Metodos que permiten pedir los datos                                       #
-#---------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
+#Metodos que permiten pedir los datos                                          #
+#------------------------------------------------------------------------------#
 
 def pedir(palabraclave):
     apedir = ''

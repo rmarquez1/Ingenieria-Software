@@ -92,17 +92,19 @@ class ArticuloTester(unittest.TestCase):
 # ------------------------------------------------------------------------------
 class ComiteTester(unittest.TestCase):
 
-    # Prueba de creacion de un miembro del comite de programa
+    # Prueba de creacion de un miembro delt comite de programa
     def testComite(self):
         comite = Comite('Ramon', 'Marquez', 'usb', 'correo@gmail.com')
         nombre = comite.get_nombre()
         apellido = comite.get_apellido()
         inst_afil = comite.get_inst_afil()
         correo = comite.get_correo()
+        nombrecompleto = comite.nombre_completo()
         self.assertEquals('Ramon', nombre)
         self.assertEquals('Marquez', apellido)
         self.assertEquals('usb', inst_afil)
         self.assertEquals('correo@gmail.com', correo)
+        self.assertEquals('Ramon Marquez', nombrecompleto)
         
     # Test de asignacion de presidente al comite
     def testAsignarPresidente(self):
@@ -1408,8 +1410,38 @@ class CLEITester(unittest.TestCase):
         self.clei = CLEI(30)
         self.resultado = self.clei.seleccion_topicos(15)
         self.assertEquals(self.resultado, [])
+        
+# -----------------------------------------------------------------------------
+#
+#
+# Prueba de la clase Inscripcion
+#
+#
+# -----------------------------------------------------------------------------
     
+class InscripcionTester(unittest.TestCase):
 
+    def testInscrito(self):
+        
+        persona = Persona('gabriel', 'gedler', 'usb', 'gabrielgedler@gmail.com')
+        inscrito1 = Inscrito(persona, '1')
+        persona = Persona('anastasia', 'lenner', 'mam', 'analenner@gmail.com')
+        inscrito2 = Inscrito(persona, '2')
+        persona = Persona('sen', 'lenner', 'mam', 'senl@hotmail.com')
+        inscrito3 = Inscrito(persona, '3')
+        persona = Persona('anna', 'kerrin', 'mak', 'anak@hotmail.com')
+        inscrito4 = Inscrito(persona, '4')
+        persona = Persona('laen', 'saled', 'mak', 'laenkin@gmail.com')
+        inscrito5 = Inscrito(persona, '5')
+        
+        self.assertEquals(inscrito1.get_paquete(), '   paquete     : Asistencia exclusiva a charlas')
+        self.assertEquals(inscrito2.get_paquete(), '   paquete     : Asistencia exclusiva a talleres')
+        self.assertEquals(inscrito3.get_paquete(), '   paquete     : Asistencia a charlas y talleres')
+        self.assertEquals(inscrito4.get_paquete(), '   paquete     : Descuento por ser academico')
+        self.assertEquals(inscrito5.get_paquete(), '   paquete     : Descuento por compra temprana')
+        persona = Persona('Gabriel', 'Gedler', 'usb', 'gabrielgedler@hotmail.com')
+        inscrito6= Inscrito (persona, '-1')
+        self.assertEquals(inscrito6.get_paquete(), None)
 # -----------------------------------------------------------------------------
 #                               MAIN PRINCIPAL
 # -----------------------------------------------------------------------------
@@ -1841,4 +1873,4 @@ def main():
                  
                  
 if __name__ == '__main__':
-   main()
+   unittest.main()

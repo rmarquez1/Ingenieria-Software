@@ -4,10 +4,12 @@
 # Clase que implementa a las personas inscritas
 # ------------------------------------------------------------------------------
 class Inscrito():
-    def __init__(self,persona=None):
+    def __init__(self,persona=None, paquete=None):
         self.persona = persona
         
-        paquete = pedir_paquete()
+        if paquete == None:
+            paquete = pedir_paquete()
+        
         if paquete == '1':
             self.paquete = TipoPaqueteCharla()
 
@@ -29,8 +31,10 @@ class Inscrito():
 
     
     def get_paquete(self):
-        return self.paquete
-    
+        if self.paquete != None:
+            return str(self.paquete.paquete())
+        else:
+            return None
     def imprimir_inscrito(self):
         print '\n nombre        : ' + self.persona.nombre_completo()
         print '   institucion : ' + self.persona.get_inst_afil()

@@ -1,6 +1,4 @@
-from Articulo import *
-from Persona import *
-import sys
+from Persona import Comite
 # ------------------------------------------------------------------------------
 # Clase que implementa CLEI
 # ------------------------------------------------------------------------------
@@ -149,7 +147,7 @@ class CLEI():
             for i in range(tamEvaluaciones):
                 # condicion minima de ser aceptable
                 # Mas de un arbitro y puntuacion mayor a 3
-                if len(lista_evaluaciones[i][1][0]) >= 1: 
+                if len(lista_evaluaciones[i][1][0]) >= 2: 
                     if lista_evaluaciones[i][1][1] >= 3.0:
                         self.set_aceptables(lista_evaluaciones[i][0], 
                                             lista_evaluaciones[i][1][1])

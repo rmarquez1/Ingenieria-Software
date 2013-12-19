@@ -224,6 +224,7 @@ class CLEITester(unittest.TestCase):
         
         
         lista_paises = clei.paises_conferencia()
+        self.assertEquals('Venezuela', lista_paises[0])
         #print 'Lista conferencia: ', lista_paises
 
     # Test de articulos presentados por un pais y que sean considerados como

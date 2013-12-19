@@ -1,5 +1,7 @@
-from CLEI import *
-from Inscripcion import *
+from Articulo import Articulo
+from CLEI import CLEI
+from Persona import Comite
+from Inscripcion import Inscritos
 import sys
 import unittest
 
@@ -23,7 +25,60 @@ def get_string(msg):
       continue
     else:
       return str
-  
+# ------------------------------------------------------------------------------
+# Prueba de la clase Articulo
+# ------------------------------------------------------------------------------
+class ArticuloTester(unittest.TestCase):
+
+    # Test de creacion de un articulo
+    def testArticulo(self):
+        articulo = Articulo(1,'Ingenieria', 'Resumen', 'Texto')
+        self.assertEquals(articulo.get_id_articulo(),1)
+        self.assertEquals(articulo.get_titulo(), 'Ingenieria')
+        self.assertEquals(articulo.get_resumen(), 'Resumen')
+        self.assertEquals(articulo.get_texto(), 'Texto')
+        
+    # Testa de asignacion de las palabras claves de los articulos
+    def testPalabrasClaves(self):
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 
+                            'Texto del articulo', 'software')
+        self.assertEquals(articulo.get_p_claves()[0], 'software')
+        
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 
+                             'Texto articulo1', 'informacion', 'tecnologia')
+
+        self.assertEquals(articulo1.get_p_claves()[0], 'informacion')
+        self.assertEquals(articulo1.get_p_claves()[1], 'tecnologia')
+        
+        articulo2 = Articulo(3, 'Traductores', 'Resumen articulo2', 
+                             'Texto articulo2', 'Automata', 'Lenguaje', 
+                             'Deterministico')
+
+        self.assertEquals(articulo2.get_p_claves()[0], 'Automata')
+        self.assertEquals(articulo2.get_p_claves()[1], 'Lenguaje')
+        self.assertEquals(articulo2.get_p_claves()[2], 'Deterministico')
+        
+        articulo3 = Articulo(4, 'Discretas', 'Resumen articulo3',
+                             'Texto articulo3', 'Conjuntos', 'Familia', 
+                             'Interseccion', 'Inversa')
+
+        self.assertEquals(articulo3.get_p_claves()[0], 'Conjuntos')
+        self.assertEquals(articulo3.get_p_claves()[1], 'Familia')
+        self.assertEquals(articulo3.get_p_claves()[2], 'Interseccion')
+        self.assertEquals(articulo3.get_p_claves()[3], 'Inversa')
+                             
+        articulo4 = Articulo(5, 'Software', 'Resumen articulo4', 
+                             'Texto articulo4', 'Clase', 'Diseno', 
+                             'Acoplamiento', 'Cohesion', 'Pruebas')
+
+        self.assertEquals(articulo4.get_p_claves()[0], 'Clase')
+        self.assertEquals(articulo4.get_p_claves()[1], 'Diseno')
+        self.assertEquals(articulo4.get_p_claves()[2], 'Acoplamiento')
+        self.assertEquals(articulo4.get_p_claves()[3], 'Cohesion')
+        self.assertEquals(articulo4.get_p_claves()[4], 'Pruebas')
+                                         
+                             
+
 # ------------------------------------------------------------------------------
 # Pruebas de la clase Comite
 # ------------------------------------------------------------------------------
@@ -67,14 +122,14 @@ class CLEITester(unittest.TestCase):
     # Test de verificar la existencia de un articulo
     def testVerificarId(self):
         clei = CLEI(3)
-        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 'Texto del articulo',
-                            'software')
+        articulo = Articulo(1,'Ingenieria', 'Resumen del articulo', 
+                            'Texto del articulo', 'software')
         
         articulo.set_autores('Ramon', 'USB', 'Venezuela')
         articulo.set_autores('Jesus', 'USB', 'Colombia')
         
-        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 'Texto articulo1',
-                             'informacion', 'tecnologia')
+        articulo1 = Articulo(2, 'Sistemas', 'Resumen articulo1', 
+                             'Texto articulo1', 'informacion', 'tecnologia')
 
         articulo1.set_autores('Marcos', 'USB', 'USA')
         articulo1.set_autores('Jose', 'USB', 'Mexico')
@@ -277,23 +332,41 @@ class CLEITester(unittest.TestCase):
 
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
+        clei.agregar_evaluaciones(9, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
         clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
@@ -369,26 +442,43 @@ class CLEITester(unittest.TestCase):
         clei.crear_articulos(9, articulo8)
 
         
-        
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
+        clei.agregar_evaluaciones(9, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
         clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
@@ -467,23 +557,41 @@ class CLEITester(unittest.TestCase):
 
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
+        clei.agregar_evaluaciones(9, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
         clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
@@ -557,28 +665,44 @@ class CLEITester(unittest.TestCase):
         clei.crear_articulos(7, articulo6)
         clei.crear_articulos(8, articulo7)
         clei.crear_articulos(9, articulo8)
-
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
         clei.agregar_evaluaciones(9, cont)
-        
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
+        clei.agregar_evaluaciones(9, cont)
         clei.crear_aceptables()
         # ------------------------------------------------------------
         # Probando seleccion
@@ -653,25 +777,42 @@ class CLEITester(unittest.TestCase):
 
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
         clei.agregar_evaluaciones(9, cont)
-        
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
+        clei.agregar_evaluaciones(9, cont)
         clei.crear_aceptables()
         # ------------------------------------------------------------
         # Probando seleccion
@@ -744,28 +885,44 @@ class CLEITester(unittest.TestCase):
         clei.crear_articulos(7, articulo6)
         clei.crear_articulos(8, articulo7)
         clei.crear_articulos(9, articulo8)
-
-        
         
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
+        clei.agregar_evaluaciones(9, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
         clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
@@ -848,26 +1005,42 @@ class CLEITester(unittest.TestCase):
 
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
         clei.agregar_evaluaciones(9, cont)
-        cont = clei.asignar_arbitro_puntuacion(10, 'correo', 4)
-        clei.agregar_evaluaciones(10, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
+        clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
         # ------------------------------------------------------------
@@ -951,33 +1124,49 @@ class CLEITester(unittest.TestCase):
 
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
         clei.agregar_evaluaciones(9, cont)
-        cont = clei.asignar_arbitro_puntuacion(10, 'correo', 4)
-        clei.agregar_evaluaciones(10, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
+        clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
         # ------------------------------------------------------------
         # Probando seleccion
         num_articulos = clei.agregar_aceptados(2)
         clei.seleccionar_por_pais(2)
-        self.assertEquals(1, clei.get_num_articulos())
+        self.assertEquals(0, clei.get_num_articulos())
         
         # ---------------------------------------------------------------
         # Prueba 4        
@@ -1053,33 +1242,50 @@ class CLEITester(unittest.TestCase):
 
         # ------------------------------------------------------------
         # Se agregan los arbitros puntuaciones y evaluaciones
-        cont = clei.asignar_arbitro_puntuacion(1, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo1', 4)
         clei.agregar_evaluaciones(1, cont)
-        cont = clei.asignar_arbitro_puntuacion(2, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(1, 'correo2', 4)
+        clei.agregar_evaluaciones(1, cont)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo1', 5)
         clei.agregar_evaluaciones(2, cont)
-        cont = clei.asignar_arbitro_puntuacion(3, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(2, 'correo2', 4)
+        clei.agregar_evaluaciones(2, cont)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo1', 4)
         clei.agregar_evaluaciones(3, cont)
-        cont = clei.asignar_arbitro_puntuacion(4, 'correo', 3)
+        cont = clei.asignar_arbitro_puntuacion(3, 'correo2', 4)
+        clei.agregar_evaluaciones(3, cont)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo1', 3)
         clei.agregar_evaluaciones(4, cont)
-        cont = clei.asignar_arbitro_puntuacion(5, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(4, 'correo2', 3)
+        clei.agregar_evaluaciones(4, cont)        
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo1', 4)
         clei.agregar_evaluaciones(5, cont)
-        cont = clei.asignar_arbitro_puntuacion(6, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(5, 'correo2', 3)
+        clei.agregar_evaluaciones(5, cont)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo1', 5)
         clei.agregar_evaluaciones(6, cont)
-        cont = clei.asignar_arbitro_puntuacion(7, 'correo', 5)
+        cont = clei.asignar_arbitro_puntuacion(6, 'correo2', 5)
+        clei.agregar_evaluaciones(6, cont)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo1', 5)
         clei.agregar_evaluaciones(7, cont)
-        cont = clei.asignar_arbitro_puntuacion(8, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(7, 'correo2', 5)
+        clei.agregar_evaluaciones(7, cont)        
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo1', 4)
         clei.agregar_evaluaciones(8, cont)
-        cont = clei.asignar_arbitro_puntuacion(9, 'correo', 4)
+        cont = clei.asignar_arbitro_puntuacion(8, 'correo2', 5)
+        clei.agregar_evaluaciones(8, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo1', 4)
         clei.agregar_evaluaciones(9, cont)
-        cont = clei.asignar_arbitro_puntuacion(10, 'correo', 4)
-        clei.agregar_evaluaciones(10, cont)
+        cont = clei.asignar_arbitro_puntuacion(9, 'correo2', 4)
+        clei.agregar_evaluaciones(9, cont)
         
         clei.crear_aceptables()
         # ------------------------------------------------------------
         # Probando seleccion
         num_articulos = clei.agregar_aceptados(2)
+        
         clei.seleccionar_por_pais(2)
-        self.assertEquals(0, clei.get_num_articulos())
+        self.assertEquals(1, clei.get_num_articulos())
 
 # -----------------------------------------------------------------------------
 #                               MAIN PRINCIPAL

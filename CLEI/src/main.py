@@ -1456,14 +1456,6 @@ def main():
     y miembros de comite de programa''' 
                     break
 
-        #########################################################
-        #
-        #
-        #Codigo a implementar para el 
-        #sistema de inscripcion de usuarios
-        #
-        #
-        #########################################################
         elif opcion == 5:
 
             while True:

@@ -2,6 +2,8 @@ from Articulo import Articulo
 from CLEI import CLEI
 from Persona import Comite, Persona, pedir, pedir_institucion, pedir_correo
 from Inscripcion import Inscrito
+from Evento import *
+from Lugar import *
 import sys
 import unittest
 
@@ -1461,6 +1463,7 @@ def main():
         print '4. Asignar puntuacion y arbitro a un articulo\n'
         print '5. Inscribir un nuevo participante\n'
         print '6. Listar participantes\n'
+        print '7. Sistema de registro de eventos\n'
         print '0. SALIR'
 
         opcion = get_number(' Indique la operacion que desea realizar')
@@ -1654,12 +1657,51 @@ def main():
             for  x in sorted(clei.inscritos):
                 clei.inscritos[x].imprimir_inscrito()
 
+        elif opcion == 7: #Registrar eventos
+               calendarios = {}
+               espacios  = {}
+               eventos   = DiccionarioDeDiccionario()
+               asignados = DiccionarioDeDiccionario()
+               controlador = 1
+               print "_-_-_-_Sistema de registro de eventos de la conferencia_-_-_-_\n"
+               calendario = calendario_conferencia()
+               while 1:
+                  print "1. Registrar Eventos"
+                  print "2. Mostrar Eventos Registrados"
+                  print "3. Registrar Espacios para la conferencia"
+                  print "4. Mostrar todos los espacios para la conferencia"
+                  print "5. Asignar espacios a eventos"
+                  print "6. Mostrar eventos con lugares asignados"
+                  print "7. Menu Principal"
 
+                  numero = get_number('Indique la operacion que desea realizar: ')
+                  if numero == 1:
+                      eventos = registrar_evento(calendario)
+                  elif numero == 2:
+                      mostrar_eventos_registrados(eventos,calendario)
+                  elif numero == 3:
+                      espacios = registrar_espacios(espacios)
+                  elif numero == 4:                      
+                      mostrar_espacios(espacios)
+                  elif numero == 5:
+                      if eventos !={} and espacios!={}:
+                         asignados = asignar_espacios(eventos,calendario,espacios)
+                      else:
+                         print "Primero debe registrar los eventos y registrar los espacios "
+                         print "para asignar luego espacios a cada evento"
+                  elif numero == 6:
+                      mostrar_eventos_con_lugares(asignados,calendario)
+                  elif numero == 7:
+                      break 
+                  else:
+                      print "Esta opcion no esta dentro del menu"
 
     while True:
         print '-----  PROCESO DE SELECCION DE ARTICULOS -----'
         print '1. Desempate por presidente de comite\n'
         print '2. Articulos escogidos por pais\n'
+        print '4. Escoger los articulos en proporcion de paises\n'
+        print '5. Escoger los articulos en proporcion a los topicos\n'
         print '0. SALIR'
         
         opcion = get_number('Indique el tipo de seleccion de articulos que desea utilizar')
@@ -1874,4 +1916,4 @@ def main():
                  
                  
 if __name__ == '__main__':
-   unittest.main()
+    main()

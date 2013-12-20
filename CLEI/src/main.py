@@ -1445,6 +1445,39 @@ class InscripcionTester(unittest.TestCase):
         persona = Persona('Gabriel', 'Gedler', 'usb', 'gabrielgedler@hotmail.com')
         inscrito6= Inscrito (persona, '-1')
         self.assertEquals(inscrito6.get_paquete(), None)
+        
+# -----------------------------------------------------------------------------
+#
+#
+# Prueba de la clase Inscripcion
+#
+#
+# -----------------------------------------------------------------------------
+
+class EventoTester(unittest.TestCase):
+   
+   #Prueba de crear evento
+   def testEvento(self):
+       evento = Evento('Apertura','2/11/2013',8,2)
+       nombre = evento.get_nombre()
+       fecha  = evento.get_fecha()
+       hora_inicio = evento.get_hora_inicio()
+       duracion = evento.get_duracion()
+       self.assertEquals('Apertura',nombre)
+       self.assertEquals('2/11/2013',fecha)
+       self.assertEquals(8,hora_inicio)
+       self.assertEquals(2,duracion)
+      
+class LugarTester(unittest.TestCase):
+      
+      def testLugar(self):
+         lugar = Lugar('Aul-100','USB',50)
+         nombre= lugar.get_nombre()
+         ubicacion = lugar.get_ubicacion()
+         capacidad_persona = lugar.get_cap_max()
+         self.assertEquals(nombre,'Aul-100')
+         self.assertEquals(ubicacion,'USB')
+         self.assertEquals(capacidad_persona,50)
 # -----------------------------------------------------------------------------
 #                               MAIN PRINCIPAL
 # -----------------------------------------------------------------------------
@@ -1916,4 +1949,4 @@ def main():
                  
                  
 if __name__ == '__main__':
-    main()
+    unittest.main()

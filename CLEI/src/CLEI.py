@@ -432,6 +432,9 @@ class CLEI():
         capacidad     = self.num_articulos
         articulos     = sorted(self.aceptables, key=(lambda x : x[1]), reverse=True)
 
+        if n2 >= n1:
+            raise ValueError
+
         for articulo in articulos:
             id_articulo = articulo[0]
             promedio    = articulo[1]
@@ -445,12 +448,12 @@ class CLEI():
                 participacion[pais] = 0
                 pendientes[pais]    = []
 
-            if promedio > n1:
+            if promedio >= n1:
                 aceptados.append(id_articulo)
                 self.articulos[id_articulo].set_aceptado(True)
                 participacion[pais] += 1
 
-            elif promedio > n2:
+            elif promedio >= n2:
                 pendientes[pais].append(id_articulo)
 
             else:

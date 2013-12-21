@@ -1478,6 +1478,212 @@ class LugarTester(unittest.TestCase):
          self.assertEquals(nombre,'Aul-100')
          self.assertEquals(ubicacion,'USB')
          self.assertEquals(capacidad_persona,50)
+
+# Pruebas estrategia 3 seleccion de articulos...
+class SeleccionNotaCorte(unittest.TestCase):
+
+    def test_uno(self):
+        conferencia = CLEI(7)
+        articulos   = []
+
+        autor1 = Autor(pais='Venezuela')
+        autor2 = Autor(pais='Colombia')
+        autor3 = Autor(pais='Ecuador')
+        autor4 = Autor(pais='Brasil')
+
+        articulo = Articulo(id_articulo=1, titulo='Articulo 1', p1='prueba')
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.autores.append(autor1)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=2, titulo='Articulo 2', p1='prueba')
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.autores.append(autor1)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=3, titulo='Articulo 3', p1='prueba')
+        articulo.set_puntuacion(3)
+        articulo.set_puntuacion(3)
+        articulo.set_puntuacion(3)
+        articulo.autores.append(autor2)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=4, titulo='Articulo 4', p1='prueba')
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.autores.append(autor1)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=5, titulo='Articulo 5', p1='prueba')
+        articulo.set_puntuacion(2)
+        articulo.set_puntuacion(2)
+        articulo.set_puntuacion(2)
+        articulo.autores.append(autor4)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=6, titulo='Articulo 6', p1='prueba')
+        articulo.set_puntuacion(3)
+        articulo.set_puntuacion(3)
+        articulo.set_puntuacion(3)
+        articulo.autores.append(autor1)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=7, titulo='Articulo 7', p1='prueba')
+        articulo.set_puntuacion(1)
+        articulo.set_puntuacion(1)
+        articulo.set_puntuacion(1)
+        articulo.autores.append(autor1)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=8, titulo='Articulo 8', p1='prueba')
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.autores.append(autor3)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=9, titulo='Articulo 9', p1='prueba')
+        articulo.set_puntuacion(3)
+        articulo.set_puntuacion(3)
+        articulo.set_puntuacion(3)
+        articulo.autores.append(autor2)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=10, titulo='Articulo 10',p1='prueba')
+        articulo.set_puntuacion(1)
+        articulo.set_puntuacion(1)
+        articulo.set_puntuacion(1)
+        articulo.autores.append(autor4)
+        articulos.append(articulo)
+
+        for articulo in articulos:
+            id_articulo = articulo.get_id_articulo()
+            promedio    = articulo.calcular_promedio()
+            conferencia.crear_articulos(id_articulo, articulo)
+
+            if promedio >= 3.00:
+                conferencia.aceptables.append((id_articulo, promedio))
+
+        conferencia.aceptar_por_notas_corte(4, 3)
+
+        self.assertEqual(conferencia.aceptados[0], 1, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[1], 8, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[2], 2, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[3], 4, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[4], 3, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[5], 9, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[6], 6, "No deberia estar en esta posicion o en la lista")
+
+    def test_dos(self):
+        conferencia = CLEI(10)
+        articulos   = []
+
+        autor1 = Autor(pais='Venezuela')
+        autor2 = Autor(pais='Colombia')
+        autor3 = Autor(pais='Ecuador')
+        autor4 = Autor(pais='Brasil')
+
+        articulo = Articulo(id_articulo=1, titulo='Articulo 1', p1='prueba')
+        articulo.set_puntuacion(3)
+        articulo.set_puntuacion(3)
+        articulo.set_puntuacion(3)
+        articulo.autores.append(autor2)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=2, titulo='Articulo 2', p1='prueba')
+        articulo.set_puntuacion(3.5)
+        articulo.set_puntuacion(3.5)
+        articulo.set_puntuacion(3.5)
+        articulo.autores.append(autor3)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=3, titulo='Articulo 3', p1='prueba')
+        articulo.set_puntuacion(3.5)
+        articulo.set_puntuacion(3.5)
+        articulo.set_puntuacion(3.5)
+        articulo.autores.append(autor3)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=4, titulo='Articulo 4', p1='prueba')
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.autores.append(autor1)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=5, titulo='Articulo 5', p1='prueba')
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.autores.append(autor1)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=6, titulo='Articulo 6', p1='prueba')
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.set_puntuacion(4)
+        articulo.autores.append(autor1)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=7, titulo='Articulo 7', p1='prueba')
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.autores.append(autor4)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=8, titulo='Articulo 8', p1='prueba')
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.autores.append(autor4)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=9, titulo='Articulo 9', p1='prueba')
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.autores.append(autor4)
+        articulos.append(articulo)
+
+        articulo = Articulo(id_articulo=10, titulo='Articulo 10',p1='prueba')
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.set_puntuacion(5)
+        articulo.autores.append(autor4)
+        articulos.append(articulo)
+
+        for articulo in articulos:
+            id_articulo = articulo.get_id_articulo()
+            promedio    = articulo.calcular_promedio()
+            conferencia.crear_articulos(id_articulo, articulo)
+
+            if promedio >= 3.00:
+                conferencia.aceptables.append((id_articulo, promedio))
+
+        conferencia.aceptar_por_notas_corte(4, 3)
+
+        self.assertEqual(conferencia.aceptados[0], 7, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[1], 8, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[2], 9, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[3], 10, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[4], 4, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[5], 5, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[6], 6, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[7], 1, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[8], 2, "No deberia estar en esta posicion o en la lista")
+        self.assertEqual(conferencia.aceptados[9], 3, "No deberia estar en esta posicion o en la lista")
+
+    def test_tres(self):
+        conferencia = CLEI(7)
+        with self.assertRaises(ValueError):
+            conferencia.aceptar_por_notas_corte(3,4)
+
 # -----------------------------------------------------------------------------
 #                               MAIN PRINCIPAL
 # -----------------------------------------------------------------------------

@@ -424,6 +424,7 @@ class CLEI():
         for i in range(tam_lista):
             promedios = self.listar_promedios(lista_no_aceptados[i][1])
             self.crear_aceptados_empatados(promedios, lista_no_aceptados[i][1])
+
     # Metodo para seleccionar la cantidad de articulos a aceptar
     # manteniendo la proporcion entre topicos diferentes
     #
@@ -574,5 +575,50 @@ class CLEI():
         for i in empat:
             self.set_empatados(i.get_id_articulo())
         return [self.aceptados, self.empatados]
-    
-        
+
+    # Estrategia 3 (segun documento) del requisito de seleccion de articulos
+    def aceptar_por_notas_corte(self, n1, n2):
+        aceptados     = []
+        participacion = {}
+        pendientes    = {}
+        capacidad     = self.num_articulos
+        articulos     = sorted(self.aceptables, key=(lambda x : x[1]), reverse=True)
+
+        if n2 >= n1:
+            raise ValueError
+
+        for articulo in articulos:
+            id_articulo = articulo[0]
+            promedio    = articulo[1]
+            pais        = self.articulos[id_articulo].get_pais()
+
+            if len(aceptados) == capacidad:
+                self.aceptados = aceptados
+                return
+
+            if not pais in participacion:
+                participacion[pais] = 0
+                pendientes[pais]    = []
+
+            if promedio >= n1:
+                aceptados.append(id_articulo)
+                self.articulos[id_articulo].set_aceptado(True)
+                participacion[pais] += 1
+
+            elif promedio >= n2:
+                pendientes[pais].append(id_articulo)
+
+            else:
+                break
+
+        prioridad = sorted(participacion.keys(), key=(lambda x : participacion[x]))
+
+        for pais in prioridad:
+
+            while pendientes[pais] and capacidad > len(aceptados):
+                id_articulo = pendientes[pais].pop(0)
+                aceptados.append(id_articulo)
+                self.articulos[id_articulo].set_aceptado(True)
+
+        self.aceptados = aceptados
+

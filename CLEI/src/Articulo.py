@@ -28,7 +28,11 @@ class Articulo():
             self.p_claves.append(p4)
         if p5 != None:
             self.p_claves.append(p5)
-    
+
+    # Devuelve el pais del autor principal
+    def get_pais(self):
+        return self.autores[0].get_pais()
+
     # Retorna la lista de autores
     def get_autores(self):
         return self.autores

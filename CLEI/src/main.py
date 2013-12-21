@@ -1680,7 +1680,7 @@ class SeleccionNotaCorte(unittest.TestCase):
         self.assertEqual(conferencia.aceptados[9], 3, "No deberia estar en esta posicion o en la lista")
 
     def test_tres(self):
-        conferencia = CLEI(7)
+        conferencia = CLEI(10)
         with self.assertRaises(ValueError):
             conferencia.aceptar_por_notas_corte(3,4)
 

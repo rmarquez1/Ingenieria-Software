@@ -1,6 +1,7 @@
+from __future__ import with_statement
 from Articulo import Articulo
 from CLEI import CLEI
-from Persona import Comite, Persona, pedir, pedir_institucion, pedir_correo
+from Persona import Comite, Persona, pedir, pedir_institucion, pedir_correo, Autor
 from Inscripcion import Inscrito
 from Evento import *
 from Lugar import *
@@ -1449,7 +1450,7 @@ class InscripcionTester(unittest.TestCase):
 # -----------------------------------------------------------------------------
 #
 #
-# Prueba de la clase Inscripcion
+# Prueba de la clase Evento y Lugar
 #
 #
 # -----------------------------------------------------------------------------
@@ -1478,6 +1479,14 @@ class LugarTester(unittest.TestCase):
          self.assertEquals(nombre,'Aul-100')
          self.assertEquals(ubicacion,'USB')
          self.assertEquals(capacidad_persona,50)
+
+# -----------------------------------------------------------------------------
+#
+#
+# Prueba de la seleccion de articulos
+#
+#
+# -----------------------------------------------------------------------------
 
 # Pruebas estrategia 3 seleccion de articulos...
 class SeleccionNotaCorte(unittest.TestCase):
